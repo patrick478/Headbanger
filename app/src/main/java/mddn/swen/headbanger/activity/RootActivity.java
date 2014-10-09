@@ -72,13 +72,13 @@ public class RootActivity extends Activity {
 
         /* None exists, the app will be unable to do anything useful */
         if (adapter == null) {
-           displayNoBluetoothDialog();
+            displayNoBluetoothDialog();
         }
 
         /* Bluetooth is turned off */
         else if (!adapter.isEnabled()) {
-            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
+                    REQUEST_ENABLE_BT);
         }
     }
 }
