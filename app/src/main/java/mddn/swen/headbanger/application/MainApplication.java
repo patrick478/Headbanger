@@ -7,6 +7,8 @@ import android.content.Intent;
 import static android.support.v4.app.ActivityCompat.startActivityForResult;
 
 /**
+ * Main application entry point
+ *
  * Created by John on 9/10/2014.
  */
 public class MainApplication extends Application {

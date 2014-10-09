@@ -7,9 +7,19 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import mddn.swen.headbanger.R;
+import mddn.swen.headbanger.fragment.DeviceSelectorFragment;
+import mddn.swen.headbanger.utilities.BluetoothUtility;
 
-
+/**
+ * Root/launching activity
+ * Created by John on 9/10/2014.
+ */
 public class RootActivity extends Activity {
+
+    /**
+     * The selector fragment
+     */
+    DeviceSelectorFragment deviceSelectorFragment;
 
     /**
      * Result code if Bluetooth needs to be enabled
@@ -20,7 +30,27 @@ public class RootActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
-        checkBluetoothAdapter();
+        deviceSelectorFragment = (DeviceSelectorFragment) getFragmentManager()
+                .findFragmentById(R.id.device_selector_fragment);
+        startBluetooth();
+    }
+
+    /**
+     * Checks the current state of the Bluetooth adapter and informs the device selector if it is
+     * available.
+     */
+    private void startBluetooth() {
+        if (BluetoothUtility.isBluetoothReady()) {
+            deviceSelectorFragment.bluetoothReady();
+        }
+        else {
+            handleNotReadyBluetooth();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        startBluetooth();
     }
 
     @Override
@@ -30,9 +60,31 @@ public class RootActivity extends Activity {
         if (requestCode == REQUEST_ENABLE_BT) {
 
             /* Failure, the app is now useless */
-            if (resultCode != RESULT_OK && !BluetoothAdapter.getDefaultAdapter().isEnabled()) {
+            if (resultCode != RESULT_OK && !BluetoothUtility.isBluetoothAvailable()) {
                 displayBluetoothOffDialog();
             }
+
+            /* Inform the fragment that data should be available */
+            else {
+                startBluetooth();
+            }
+        }
+    }
+
+    /**
+     * Bluetooth adapter is reportedly unavailable, check why.
+     */
+    private void handleNotReadyBluetooth() {
+
+        /* None exists, the app will be unable to do anything useful */
+        if (!BluetoothUtility.isBluetoothAvailable()) {
+            displayNoBluetoothDialog();
+        }
+
+        /* Bluetooth is turned off */
+        else {
+            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
+                    REQUEST_ENABLE_BT);
         }
     }
 
@@ -59,26 +111,5 @@ public class RootActivity extends Activity {
                         "available. This application requires a Bluetooth adapter to work.")
                 .setPositiveButton("Ok", null)
                 .show();
-    }
-
-    /**
-     * Queries the bluetooth adapter and request it be turned on if off, handles failure
-     * if unavailable
-     */
-    private void checkBluetoothAdapter() {
-
-        /* Get an instance of the adapter */
-        BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
-
-        /* None exists, the app will be unable to do anything useful */
-        if (adapter == null) {
-            displayNoBluetoothDialog();
-        }
-
-        /* Bluetooth is turned off */
-        else if (!adapter.isEnabled()) {
-            startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
-                    REQUEST_ENABLE_BT);
-        }
     }
 }
