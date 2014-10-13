@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Headbanger</string>
+    <!--Facebook resource-->
+    <string name="title_facebook_login">Facebook Login</string>
     <string name="app_id">720299018049868</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--App name-->
+    <string name="app_name">Headbanger</string>
+
+    <!--Facebook login failure-->
+    <string name="facebook_failure_title">Login Failed</string>
+    <string name="facebook_failure_message">This application requires access to your Facebook account. We will never post anything to your wall without your permission. Please login to continue</string>
+    <string name="facebook_failure_dismiss_button">Ok</string>
 
 </resources>

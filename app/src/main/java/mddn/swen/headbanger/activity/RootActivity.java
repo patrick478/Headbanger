@@ -52,6 +52,7 @@ public class RootActivity extends Activity {
 
     @Override
     public void onResume() {
+        super.onResume();
         startBluetooth();
     }
 
