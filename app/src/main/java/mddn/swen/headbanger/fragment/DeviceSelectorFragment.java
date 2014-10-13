@@ -31,7 +31,7 @@ public class DeviceSelectorFragment extends Fragment implements AdapterView.OnIt
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.device_selector_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_device_selector, container, false);
         ButterKnife.inject(this, view);
         devicePickerListView.setOnItemClickListener(this);
         return view;
