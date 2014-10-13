@@ -1,5 +1,6 @@
 package mddn.swen.headbanger.utilities;
 
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
@@ -9,6 +10,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+
+import mddn.swen.headbanger.application.MainApplication;
 
 /**
  * A set of utilities used for querying the current state of the Bluetooth adapter
@@ -66,5 +69,30 @@ public class BluetoothUtility {
         else{
             return new HashSet<BluetoothDevice>();
         }
+    }
+
+    /**
+     * Displays a dialog when the user chooses not to turn on their bluetooth - but a bluetooth
+     * adapter <i>is actually available</i>.
+     */
+    public static void bluetoothOffDialog() {
+        new AlertDialog.Builder(MainApplication.application)
+                .setTitle("Bluetooth Disabled")
+                .setMessage("This application requires access to your Bluetooth adapter - " +
+                        "please enable it to continue using the app.")
+                .setPositiveButton("Ok", null)
+                .show();
+    }
+
+    /**
+     * Displays a dialog when there is <b>no bluetooth adapter on the device.</b>
+     */
+    public static void bluetoothUnavailableDialog() {
+        new AlertDialog.Builder(MainApplication.application)
+                .setTitle("Bluetooth Unsupported")
+                .setMessage("Unfortunately, your device does not have a Bluetooth adapter " +
+                        "available. This application requires a Bluetooth adapter to work.")
+                .setPositiveButton("Ok", null)
+                .show();
     }
 }

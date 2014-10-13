@@ -64,7 +64,7 @@ public class RootActivity extends Activity {
 
             /* Failure, the app is now useless */
             if (resultCode != RESULT_OK && !BluetoothUtility.isBluetoothAvailable()) {
-                displayBluetoothOffDialog();
+                BluetoothUtility.bluetoothOffDialog();
             }
 
             /* Inform the fragment that data should be available */
@@ -81,7 +81,7 @@ public class RootActivity extends Activity {
 
         /* None exists, the app will be unable to do anything useful */
         if (!BluetoothUtility.isBluetoothAvailable()) {
-            displayNoBluetoothDialog();
+            BluetoothUtility.bluetoothUnavailableDialog();
         }
 
         /* Bluetooth is turned off */
@@ -89,30 +89,5 @@ public class RootActivity extends Activity {
             startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
                     REQUEST_ENABLE_BT);
         }
-    }
-
-    /**
-     * Displays a dialog when the user chooses not to turn on their bluetooth - but a bluetooth
-     * adapter <i>is actually available</i>.
-     */
-    private void displayBluetoothOffDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Bluetooth Disabled")
-                .setMessage("This application requires access to your Bluetooth adapter - " +
-                        "please enable it to continue using the app.")
-                .setPositiveButton("Ok", null)
-                .show();
-    }
-
-    /**
-     * Displays a dialog when there is <b>no bluetooth adapter on the device.</b>
-     */
-    private void displayNoBluetoothDialog() {
-        new AlertDialog.Builder(this)
-                .setTitle("Bluetooth Unsupported")
-                .setMessage("Unfortunately, your device does not have a Bluetooth adapter " +
-                        "available. This application requires a Bluetooth adapter to work.")
-                .setPositiveButton("Ok", null)
-                .show();
     }
 }
