@@ -3,5 +3,6 @@
 
     <string name="app_name">Headbanger</string>
     <string name="app_id">720299018049868</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

@@ -30,8 +30,10 @@ public class RootActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
-        deviceSelectorFragment = (DeviceSelectorFragment) getFragmentManager()
-                .findFragmentById(R.id.device_selector_fragment);
+        if (savedInstanceState == null) {
+            deviceSelectorFragment = (DeviceSelectorFragment) getFragmentManager()
+                    .findFragmentById(R.id.fragment_device_selector);
+        }
         startBluetooth();
     }
 

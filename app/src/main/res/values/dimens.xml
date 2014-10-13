@@ -3,7 +3,9 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 
-    <!--Default bar buttons-->
+    <!--Default bar button size-->
     <dimen name="button_bar_height">44dp</dimen>
+
+    <dimen name="headphone_offset">100dp</dimen>
 
 </resources>
