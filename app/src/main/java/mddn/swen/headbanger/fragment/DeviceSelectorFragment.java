@@ -99,7 +99,7 @@ public class DeviceSelectorFragment extends Fragment implements AdapterView.OnIt
 
     @Override
     public int getViewTypeCount() {
-        return 0;
+        return 1;
     }
 
     @Override

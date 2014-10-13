@@ -10,10 +10,10 @@ import mddn.swen.headbanger.fragment.DeviceSelectorFragment;
 import mddn.swen.headbanger.utilities.BluetoothUtility;
 
 /**
- * Root/launching activity
+ * Selects a device
  * Created by John on 9/10/2014.
  */
-public class RootActivity extends Activity {
+public class DeviceSelectorActivity extends Activity {
 
     /**
      * The selector fragment
@@ -28,7 +28,7 @@ public class RootActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_root);
+        setContentView(R.layout.activity_device_selector);
         if (savedInstanceState == null) {
             deviceSelectorFragment = (DeviceSelectorFragment) getFragmentManager()
                     .findFragmentById(R.id.fragment_device_selector);

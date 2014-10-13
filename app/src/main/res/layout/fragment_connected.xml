@@ -9,18 +9,18 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/headbanger_login_icon"
+        android:id="@+id/headbanger_connected_icon"
         android:src="@drawable/headphone"
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:layout_centerHorizontal="true" />
 
-    <com.facebook.widget.LoginButton
-        android:id="@+id/authButton"
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:text="@+string/connected_successful_string"
+        android:id="@+id/connected_generic_text"
+        android:layout_below="@+id/headbanger_connected_icon"
         android:layout_centerHorizontal="true" />
+
 
 </RelativeLayout>

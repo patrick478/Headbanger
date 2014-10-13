@@ -2,32 +2,15 @@ package mddn.swen.headbanger.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
-import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-
 import mddn.swen.headbanger.R;
-import mddn.swen.headbanger.fragment.DeviceSelectorFragment;
 import mddn.swen.headbanger.fragment.LoginFragment;
 
 public class LoginActivity extends Activity {
@@ -97,8 +80,8 @@ public class LoginActivity extends Activity {
     /**
      * To be called when login was successfully achieved - begins the root activity
      */
-    private void loginSuccessful() {
-        startActivity(new Intent(this, RootActivity.class));
+    private void loginSuccessful() { //TODO should probably have some networking with our server first? Could actually do this async
+        startActivity(new Intent(this, DeviceSelectorActivity.class));
         finish();
     }
 }
