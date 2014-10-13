@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -52,10 +53,11 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onCompleted(GraphUser user, Response response) {
                     if (user != null) {
-                        System.out.println(user);
+                        Log.v("Facebook login success", user.toString());
                         loginSuccessful();
                     }
                     else {
+                        Log.v("Facebook login error reported", response.getError().toString());
                         facebookLoginFailureDialog();
                     }
                 }
