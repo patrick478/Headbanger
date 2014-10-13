@@ -31,7 +31,7 @@
             android:label="@string/title_facebook_login" >
         </activity>
 
-        <!-- Root activity, user lands here after logging in -->
+        <!-- An activity that allows the user to select their device. Called once logged in -->
         <activity
             android:name=".activity.DeviceSelectorActivity"
             android:label="@string/app_name" >
