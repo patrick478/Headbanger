@@ -1,7 +1,6 @@
 package mddn.swen.headbanger.activity;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
@@ -48,12 +47,6 @@ public class RootActivity extends Activity {
         else {
             handleNotReadyBluetooth();
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        startBluetooth();
     }
 
     @Override
