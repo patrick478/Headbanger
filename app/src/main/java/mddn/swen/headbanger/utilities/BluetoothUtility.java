@@ -3,6 +3,7 @@ package mddn.swen.headbanger.utilities;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 
@@ -11,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.application.MainApplication;
 
 /**
@@ -76,11 +78,11 @@ public class BluetoothUtility {
      * adapter <i>is actually available</i>.
      */
     public static void bluetoothOffDialog() {
-        new AlertDialog.Builder(MainApplication.application)
-                .setTitle("Bluetooth Disabled")
-                .setMessage("This application requires access to your Bluetooth adapter - " +
-                        "please enable it to continue using the app.")
-                .setPositiveButton("Ok", null)
+        Context context = MainApplication.application;
+        new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.bluetooth_off_title))
+                .setMessage(context.getString(R.string.bluetooth_off_message))
+                .setPositiveButton(context.getString(R.string.bluetooth_off_dismiss_button), null)
                 .show();
     }
 
@@ -88,11 +90,11 @@ public class BluetoothUtility {
      * Displays a dialog when there is <b>no bluetooth adapter on the device.</b>
      */
     public static void bluetoothUnavailableDialog() {
-        new AlertDialog.Builder(MainApplication.application)
-                .setTitle("Bluetooth Unsupported")
-                .setMessage("Unfortunately, your device does not have a Bluetooth adapter " +
-                        "available. This application requires a Bluetooth adapter to work.")
-                .setPositiveButton("Ok", null)
+        Context context = MainApplication.application;
+        new AlertDialog.Builder(context)
+                .setTitle(context.getString(R.string.bluetooth_unavailable_title))
+                .setMessage(context.getString(R.string.bluetooth_unavailable_message))
+                .setPositiveButton(context.getString(R.string.bluetooth_unavailable_dismiss_button), null)
                 .show();
     }
 }

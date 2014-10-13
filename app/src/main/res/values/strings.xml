@@ -13,4 +13,12 @@
     <string name="facebook_failure_message">This application requires access to your Facebook account. We will never post anything to your wall without your permission. Please login to continue</string>
     <string name="facebook_failure_dismiss_button">Ok</string>
 
+    <!--Bluetooth error strings-->
+    <string name="bluetooth_unavailable_title">Bluetooth Unsupported</string>
+    <string name="bluetooth_unavailable_message">Unfortunately, your device does not have a Bluetooth adapter available. This application requires a Bluetooth adapter to work.</string>
+    <string name="bluetooth_unavailable_dismiss_button">Ok</string>
+    <string name="bluetooth_off_title">Bluetooth Disabled</string>
+    <string name="bluetooth_off_message">This application requires access to your Bluetooth adapter - please enable it to continue using the app.</string>
+    <string name="bluetooth_off_dismiss_button">Ok</string>
+
 </resources>
