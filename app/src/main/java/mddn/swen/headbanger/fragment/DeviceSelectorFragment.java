@@ -1,6 +1,7 @@
 package mddn.swen.headbanger.fragment;
 
 import android.app.Fragment;
+import android.bluetooth.BluetoothDevice;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -9,6 +10,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.HashSet;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -89,7 +93,23 @@ public class DeviceSelectorFragment extends Fragment implements AdapterView.OnIt
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null; //TODO
+
+        //recycle views that already exist
+        if (convertView == null){
+            LayoutInflater layoutInflater = this.getActivity().getLayoutInflater();
+            convertView = layoutInflater.inflate(R.layout.device_list_item, null);
+        }
+
+        //retrieve the Bluetooth device corresponding to position in list
+        BluetoothDevice btDevice = (BluetoothDevice) (BluetoothUtility.connectedDevices().toArray())[position];
+
+        TextView itemName = (TextView) convertView.findViewById(R.id.bluetooth_item_name);
+
+        itemName.setText(btDevice.getName());
+
+
+        return convertView;
+
     }
 
     @Override
