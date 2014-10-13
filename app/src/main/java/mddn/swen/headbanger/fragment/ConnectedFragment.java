@@ -1,11 +1,15 @@
 package mddn.swen.headbanger.fragment;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
@@ -42,10 +46,29 @@ public class ConnectedFragment extends Fragment {
      * Begins the wiggle animation for the headbanger icon
      */
     private void beginIconWiggle() {
-        RotateAnimation anim = new RotateAnimation(0f, 350f, 15f, 15f);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(Animation.INFINITE);
-        anim.setDuration(700);
-        connectedIcon.startAnimation(anim);
+        Animation wiggle = AnimationUtils.loadAnimation(this.getActivity(),
+                R.anim.connected_icon_wiggle_anim);
+        wiggle.setAnimationListener(new Animation.AnimationListener() {
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        connectedIcon.setAnimation(null);
+                        beginIconWiggle();
+                    }
+                }, 5000);
+            }
+
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+            }
+        });
+        connectedIcon.startAnimation(wiggle);
     }
 }
