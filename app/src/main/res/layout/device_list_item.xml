@@ -12,17 +12,19 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_toLeftOf="@+id/bluetooth_device_list_type"
         android:layout_toStartOf="@+id/bluetooth_device_list_type"/>
 
     <ImageView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_centerVertical="true"
         android:maxHeight="25dp"
         android:adjustViewBounds="true"
         android:id="@+id/bluetooth_device_list_type"
-        android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
