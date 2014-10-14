@@ -115,6 +115,7 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
         if (convertView == null || !convertView.getTag().equals(Integer.valueOf(SECTION_HEADER))){
             LayoutInflater layoutInflater = parentFragment.getActivity().getLayoutInflater();
             convertView = layoutInflater.inflate(R.layout.device_list_section, null);
+            convertView.setTag(Integer.valueOf(SECTION_HEADER));
         }
 
         /* Assign the text */
@@ -134,6 +135,7 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
         if (convertView == null || !convertView.getTag().equals(Integer.valueOf(DEVICE_ROW))){
             LayoutInflater layoutInflater = parentFragment.getActivity().getLayoutInflater();
             convertView = layoutInflater.inflate(R.layout.device_list_item, null);
+            convertView.setTag(Integer.valueOf(DEVICE_ROW));
         }
 
         /* Get the bluetooth device at this index */
