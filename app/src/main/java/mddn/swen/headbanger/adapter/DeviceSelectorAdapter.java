@@ -13,7 +13,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import mddn.swen.headbanger.R;
@@ -27,6 +29,10 @@ import mddn.swen.headbanger.utilities.BluetoothUtility;
  */
 public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
 
+    /* Used to denote the item type to pull */
+    private static final int DEVICE_ROW     = 0;
+    private static final int SECTION_HEADER = 1;
+
     /**
      * The holding fragment
      */
@@ -38,6 +44,11 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
     private Set<BluetoothDevice> foundDevices;
 
     /**
+     * A list containing "Bluetooth Devices" and "Section Header" titles
+     */
+    private List<Object> listItems;
+
+    /**
      * Default constructor for the adapter
      *
      * @param fragment Requires access to the calling fragment
@@ -45,6 +56,11 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
     public DeviceSelectorAdapter(DeviceSelectorFragment fragment) {
         parentFragment = fragment;
         foundDevices = new HashSet<BluetoothDevice>();
+        listItems = new ArrayList<Object>();
+        if (BluetoothUtility.connectedDevices().size() > 0) {
+            listItems.add(parentFragment.getString(R.string.devices_connected_header));
+            listItems.addAll(BluetoothUtility.connectedDevices());
+        }
     }
 
     /**
@@ -53,8 +69,13 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
      * @param newDevice A device to add to the list of found devices.
      */
     public void newDeviceFound(BluetoothDevice newDevice) {
-        foundDevices.add(newDevice);
-        notifyDataSetChanged();
+        if (foundDevices.add(newDevice)) {
+            if (foundDevices.size() == 1) {
+                listItems.add(parentFragment.getString(R.string.devices_available_header));
+            }
+            listItems.add(newDevice);
+            notifyDataSetChanged();
+        }
     }
 
     @Override
@@ -67,42 +88,52 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
     }
 
     @Override
-    public void registerDataSetObserver(DataSetObserver observer) {}
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {}
-
-    @Override
     public int getCount() {
-        return BluetoothUtility.connectedDevices().size() + foundDevices.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
+        return listItems.size();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        if (getItemViewType(position) == SECTION_HEADER) {
+            return getSectionHeader(position, convertView, parent);
+        }
+        else {
+            return getRowItem(position, convertView, parent);
+        }
+    }
 
-        //recycle views that already exist
-        if (convertView == null){
+    /**
+     * Returns the section header for this item
+     */
+    private View getSectionHeader(int position, View convertView, ViewGroup parent) {
+
+        /* Recycle views */
+        if (convertView == null || !convertView.getTag().equals(Integer.valueOf(SECTION_HEADER))){
+            LayoutInflater layoutInflater = parentFragment.getActivity().getLayoutInflater();
+            convertView = layoutInflater.inflate(R.layout.device_list_section, null);
+        }
+
+        /* Assign the text */
+        TextView sectionHeader = (TextView) convertView.findViewById(R.id.list_section_header_title);
+        sectionHeader.setText((String) listItems.get(position));
+
+        /* Return the view */
+        return convertView;
+    }
+
+    /**
+     * Returns the row item for the actual bluetooth device
+     */
+    private View getRowItem(int position, View convertView, ViewGroup parent) {
+
+        /* Recycle views */
+        if (convertView == null || !convertView.getTag().equals(Integer.valueOf(DEVICE_ROW))){
             LayoutInflater layoutInflater = parentFragment.getActivity().getLayoutInflater();
             convertView = layoutInflater.inflate(R.layout.device_list_item, null);
         }
 
-        //retrieve the Bluetooth device corresponding to position in list
-        BluetoothDevice btDevice = (BluetoothDevice) (BluetoothUtility.connectedDevices().toArray())[position];
+        /* Get the bluetooth device at this index */
+        BluetoothDevice btDevice = (BluetoothDevice) listItems.get(position);
 
         /* Assign the item name */
         TextView itemName = (TextView) convertView.findViewById(R.id.bluetooth_device_list_name);
@@ -144,12 +175,17 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
 
     @Override
     public int getItemViewType(int position) {
-        return 0;
+        if (listItems.get(position) instanceof String) {
+            return SECTION_HEADER;
+        }
+        else {
+            return DEVICE_ROW;
+        }
     }
 
     @Override
     public int getViewTypeCount() {
-        return 1;
+        return 2; //Generic list items and section headers
     }
 
     @Override
@@ -159,11 +195,33 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
 
     @Override
     public boolean areAllItemsEnabled() {
-        return false;
+        return false; //Section headers are not enabled
     }
 
     @Override
     public boolean isEnabled(int position) {
-        return true;
+        return true; //TODO section headers not enabled
+    }
+
+    @Override
+    public void registerDataSetObserver(DataSetObserver observer) {}
+
+    @Override
+    public void unregisterDataSetObserver(DataSetObserver observer) {}
+
+
+    @Override
+    public Object getItem(int position) {
+        return null;
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
     }
 }

@@ -24,6 +24,10 @@
     <string name="bluetooth_scan_fail_message">There has been a critical error with your device. Please check Bluetooth is working and try again</string>
     <string name="bluetooth_scan_fail_dismiss_button">Ok</string>
 
+    <!--Device selection strings-->
+    <string name="devices_connected_header">Connected Devices</string>
+    <string name="devices_available_header">Available Devices</string>
+
     <!--Connected screen strings-->
     <string name="connected_successful_string">Connected to headset successfully</string>
 
