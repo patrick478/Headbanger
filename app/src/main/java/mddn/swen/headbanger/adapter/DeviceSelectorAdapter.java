@@ -18,6 +18,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.fragment.DeviceSelectorFragment;
 import mddn.swen.headbanger.utilities.BluetoothUtility;
@@ -81,14 +83,10 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        /*do nothing if header is tapped*/
-        if ((getItemViewType(position) != SECTION_HEADER)){
             /* Toggle the view */
             view.setSelected(!view.isSelected());
 
             System.out.println("Tapped on a Bluetooth device!");
-        }
-
     }
 
     @Override
@@ -112,15 +110,19 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
     private View getSectionHeader(int position, View convertView, ViewGroup parent) {
 
         /* Recycle views */
-        if (convertView == null || !convertView.getTag().equals(Integer.valueOf(SECTION_HEADER))){
+        HeaderViewHolder holder;
+        if (convertView == null || !(convertView.getTag() instanceof HeaderViewHolder)){
             LayoutInflater layoutInflater = parentFragment.getActivity().getLayoutInflater();
             convertView = layoutInflater.inflate(R.layout.device_list_section, null);
-            convertView.setTag(Integer.valueOf(SECTION_HEADER));
+            holder = new HeaderViewHolder(convertView);
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (HeaderViewHolder) convertView.getTag();
         }
 
         /* Assign the text */
-        TextView sectionHeader = (TextView) convertView.findViewById(R.id.list_section_header_title);
-        sectionHeader.setText((String) listItems.get(position));
+        holder.sectionTitle.setText((String) listItems.get(position));
 
         /* Return the view */
         return convertView;
@@ -132,22 +134,25 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
     private View getRowItem(int position, View convertView, ViewGroup parent) {
 
         /* Recycle views */
-        if (convertView == null || !convertView.getTag().equals(Integer.valueOf(DEVICE_ROW))){
+        DeviceViewHolder holder;
+        if (convertView == null || !(convertView.getTag() instanceof DeviceViewHolder)){
             LayoutInflater layoutInflater = parentFragment.getActivity().getLayoutInflater();
             convertView = layoutInflater.inflate(R.layout.device_list_item, null);
-            convertView.setTag(Integer.valueOf(DEVICE_ROW));
+            holder = new DeviceViewHolder(convertView);
+            convertView.setTag(holder);
+        }
+        else {
+            holder = (DeviceViewHolder) convertView.getTag();
         }
 
         /* Get the bluetooth device at this index */
         BluetoothDevice btDevice = (BluetoothDevice) listItems.get(position);
 
         /* Assign the item name */
-        TextView itemName = (TextView) convertView.findViewById(R.id.bluetooth_device_list_name);
-        itemName.setText(btDevice.getName());
+        holder.deviceName.setText(btDevice.getName());
 
         /* Assign the item icon */
-        ImageView itemType = (ImageView) convertView.findViewById(R.id.bluetooth_device_list_type);
-        itemType.setImageDrawable(getIconForDevice(btDevice));
+        holder.icon.setImageDrawable(getIconForDevice(btDevice));
 
         /* Return the view */
         return convertView;
@@ -206,15 +211,47 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
 
     @Override
     public boolean isEnabled(int position) {
-        return true; //TODO section headers not enabled
+        return getItemViewType(position) == DEVICE_ROW;
     }
+
+    /**
+     * Keeps track of the device views
+     */
+    public static class DeviceViewHolder {
+
+        @InjectView(R.id.bluetooth_device_list_type)
+        ImageView icon;
+
+        @InjectView(R.id.bluetooth_device_list_name)
+        TextView deviceName;
+
+        public DeviceViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
+    }
+
+    /**
+     * Keeps track of the header views
+     */
+    public static class HeaderViewHolder {
+
+        @InjectView(R.id.list_section_header_title)
+        TextView sectionTitle;
+
+        public HeaderViewHolder(View view) {
+            ButterKnife.inject(this, view);
+        }
+    }
+
+    /**
+     * Following satisfies the implementation, we don't actually care though
+     */
 
     @Override
     public void registerDataSetObserver(DataSetObserver observer) {}
 
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {}
-
 
     @Override
     public Object getItem(int position) {
