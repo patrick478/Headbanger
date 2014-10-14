@@ -47,6 +47,9 @@ public class BluetoothUtility {
      */
     public static boolean startScan() {
         if (isBluetoothReady()) {
+            if (BluetoothAdapter.getDefaultAdapter().isDiscovering()) {
+                BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+            }
             return BluetoothAdapter.getDefaultAdapter().startDiscovery();
         }
         else{
