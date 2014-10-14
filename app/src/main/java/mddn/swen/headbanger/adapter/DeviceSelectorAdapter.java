@@ -81,10 +81,14 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        /* Toggle the view */
-        view.setSelected(!view.isSelected());
+        /*do nothing if header is tapped*/
+        if ((getItemViewType(position) != SECTION_HEADER)){
+            /* Toggle the view */
+            view.setSelected(!view.isSelected());
 
-        System.out.println("PRESSED!");
+            System.out.println("Tapped on a Bluetooth device!");
+        }
+
     }
 
     @Override
