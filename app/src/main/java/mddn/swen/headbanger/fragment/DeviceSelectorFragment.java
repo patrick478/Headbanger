@@ -1,22 +1,22 @@
 package mddn.swen.headbanger.fragment;
 
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.bluetooth.BluetoothDevice;
-import android.database.DataSetObserver;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
-
-import java.util.HashSet;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import mddn.swen.headbanger.R;
+import mddn.swen.headbanger.adapter.DeviceSelectorAdapter;
 import mddn.swen.headbanger.utilities.BluetoothUtility;
 
 /**
@@ -24,8 +24,7 @@ import mddn.swen.headbanger.utilities.BluetoothUtility;
  *
  * Created by John on 10/10/2014.
  */
-public class DeviceSelectorFragment extends Fragment implements AdapterView.OnItemClickListener,
-        ListAdapter {
+public class DeviceSelectorFragment extends Fragment {
 
     /**
      * Reference the list view
@@ -33,11 +32,22 @@ public class DeviceSelectorFragment extends Fragment implements AdapterView.OnIt
     @InjectView(R.id.bt_device_list_view)
     ListView devicePickerListView;
 
+    /**
+     * The list adapter that will be responsible for displaying and receiving user I/O
+     */
+    private DeviceSelectorAdapter listAdapter;
+
+    /**
+     * Object responsible for listening to the availability of BT devices/
+     */
+    private DeviceFoundListener listener;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_device_selector, container, false);
         ButterKnife.inject(this, view);
-        devicePickerListView.setOnItemClickListener(this);
+        listAdapter = new DeviceSelectorAdapter(this);
+        devicePickerListView.setOnItemClickListener(listAdapter);
         return view;
     }
 
@@ -45,95 +55,48 @@ public class DeviceSelectorFragment extends Fragment implements AdapterView.OnIt
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.reset(this);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //TODO respond to the user pressing on this
+        getActivity().unregisterReceiver(listener);
     }
 
     /**
-     * To be called once the bluetooth adapter is available, displays the lsit of currently
+     * To be called once the bluetooth adapter is available, displays the list of currently
      * connected devices and begins a search for more.
      */
     public void bluetoothReady() {
-        devicePickerListView.setAdapter(this);
-        BluetoothUtility.startScan();
-    }
-
-    @Override
-    public void registerDataSetObserver(DataSetObserver observer) {
-
-    }
-
-    @Override
-    public void unregisterDataSetObserver(DataSetObserver observer) {
-
-    }
-
-    @Override
-    public int getCount() {
-        return BluetoothUtility.connectedDevices().size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return null;
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-        //recycle views that already exist
-        if (convertView == null){
-            LayoutInflater layoutInflater = this.getActivity().getLayoutInflater();
-            convertView = layoutInflater.inflate(R.layout.device_list_item, null);
+        devicePickerListView.setAdapter(listAdapter);
+        try {
+            getActivity().unregisterReceiver(listener);
+        } catch (Exception e){}
+        listener = new DeviceFoundListener();
+        IntentFilter btFound =  new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        getActivity().registerReceiver(listener, btFound);
+        if (!BluetoothUtility.startScan()) {
+            bluetoothStartScanFailed();
         }
-
-        //retrieve the Bluetooth device corresponding to position in list
-        BluetoothDevice btDevice = (BluetoothDevice) (BluetoothUtility.connectedDevices().toArray())[position];
-
-        TextView itemName = (TextView) convertView.findViewById(R.id.bluetooth_item_name);
-
-        itemName.setText(btDevice.getName());
-
-
-        return convertView;
-
     }
 
-    @Override
-    public int getItemViewType(int position) {
-        return 0;
+    /**
+     * Handles the instance where the bluetooth scan failed. Should never have to call here
+     */
+    private void bluetoothStartScanFailed() {
+        new AlertDialog.Builder(this.getActivity())
+                .setTitle(getString(R.string.bluetooth_scan_fail_title))
+                .setMessage(getString(R.string.bluetooth_scan_fail_message))
+                .setPositiveButton(getString(R.string.bluetooth_scan_fail_dismiss_button), null)
+                .show();
     }
 
-    @Override
-    public int getViewTypeCount() {
-        return 1;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public boolean areAllItemsEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled(int position) {
-        return false;
+    /**
+     * Listens for the Broadcast events that find new Bluetooth pairs
+     */
+    private class DeviceFoundListener extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (BluetoothDevice.ACTION_FOUND.equals(action)){
+                BluetoothDevice newDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+                listAdapter.newDeviceFound(newDevice);
+            }
+        }
     }
 }
