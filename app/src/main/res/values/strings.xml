@@ -27,6 +27,7 @@
     <!--Device selection strings-->
     <string name="devices_connected_header">Connected Devices</string>
     <string name="devices_available_header">Available Devices</string>
+    <string name="devices_scan_button">Scan</string>
 
     <!--Connected screen strings-->
     <string name="connected_successful_string">Connected to headset successfully</string>

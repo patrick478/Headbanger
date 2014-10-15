@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,8 @@ import mddn.swen.headbanger.utilities.BluetoothUtility;
  * Created by John on 10/10/2014.
  */
 public class DeviceSelectorFragment extends Fragment {
+
+    private static final String TAG = DeviceSelectorFragment.class.getSimpleName();
 
     /**
      * Reference the list view
@@ -96,6 +99,8 @@ public class DeviceSelectorFragment extends Fragment {
             if (BluetoothDevice.ACTION_FOUND.equals(action)){
                 BluetoothDevice newDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 listAdapter.newDeviceFound(newDevice);
+
+                Log.d(TAG, "New device found");
             }
         }
     }

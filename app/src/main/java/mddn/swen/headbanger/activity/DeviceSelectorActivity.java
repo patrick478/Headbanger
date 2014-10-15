@@ -2,8 +2,12 @@ package mddn.swen.headbanger.activity;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.fragment.DeviceSelectorFragment;
@@ -13,12 +17,17 @@ import mddn.swen.headbanger.utilities.BluetoothUtility;
  * Selects a device
  * Created by John on 9/10/2014.
  */
-public class DeviceSelectorActivity extends Activity {
+public class DeviceSelectorActivity extends Activity implements View.OnClickListener {
 
     /**
      * The selector fragment
      */
     DeviceSelectorFragment deviceSelectorFragment;
+
+    /**
+     * The "scan" button, for discovering new devices
+     */
+    private Button scanButton;
 
     /**
      * Result code if Bluetooth needs to be enabled
@@ -32,6 +41,8 @@ public class DeviceSelectorActivity extends Activity {
         if (savedInstanceState == null) {
             deviceSelectorFragment = (DeviceSelectorFragment) getFragmentManager()
                     .findFragmentById(R.id.fragment_device_selector);
+            scanButton = (Button) this.findViewById(R.id.scan_devices_button);
+            scanButton.setOnClickListener(this);
         }
         startBluetooth();
     }
@@ -81,6 +92,13 @@ public class DeviceSelectorActivity extends Activity {
         else {
             startActivityForResult(new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE),
                     REQUEST_ENABLE_BT);
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getId() == R.id.scan_devices_button){
+            deviceSelectorFragment.bluetoothReady();
         }
     }
 }

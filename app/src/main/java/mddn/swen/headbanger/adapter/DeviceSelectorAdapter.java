@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.res.Resources;
 import android.database.DataSetObserver;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,9 @@ import mddn.swen.headbanger.utilities.BluetoothUtility;
  * Created by John on 14/10/2014.
  */
 public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.OnItemClickListener {
+
+    private static final String TAG = DeviceSelectorAdapter.class.getSimpleName();
+
 
     /* Used to denote the item type to pull */
     private static final int DEVICE_ROW     = 0;
@@ -86,7 +90,8 @@ public class DeviceSelectorAdapter extends BaseAdapter implements AdapterView.On
         /* Toggle the view */
         if (getItemViewType(position) == DEVICE_ROW) {
             view.setSelected(!view.isSelected());
-            System.out.println("Tapped on a Bluetooth device!");
+
+            Log.d(TAG, "Tapped on a Bluetooth device!");
         }
     }
 

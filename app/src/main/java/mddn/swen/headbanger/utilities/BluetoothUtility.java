@@ -6,6 +6,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,6 +22,8 @@ import mddn.swen.headbanger.application.MainApplication;
  * Created by John on 10/10/2014.
  */
 public class BluetoothUtility {
+
+    private static final String TAG = BluetoothUtility.class.getSimpleName();
 
     /**
      * Checks to see if a Bluetooth adapter is available on this device
@@ -49,10 +52,13 @@ public class BluetoothUtility {
         if (isBluetoothReady()) {
             if (BluetoothAdapter.getDefaultAdapter().isDiscovering()) {
                 BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
+                Log.d(TAG, "canceled scan");
             }
+            Log.d(TAG, "started scan");
             return BluetoothAdapter.getDefaultAdapter().startDiscovery();
         }
         else{
+            Log.d(TAG, "not scanning");
             return false;
         }
     }
