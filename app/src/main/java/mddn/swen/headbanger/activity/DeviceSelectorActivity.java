@@ -6,11 +6,15 @@ import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.Button;
 
+import butterknife.InjectView;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.fragment.DeviceSelectorFragment;
+import mddn.swen.headbanger.navigation.NavigationDrawerFragment;
 import mddn.swen.headbanger.utilities.BluetoothUtility;
 
 /**

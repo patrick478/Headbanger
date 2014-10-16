@@ -6,6 +6,11 @@
     <!--Default bar button size-->
     <dimen name="button_bar_height">44dp</dimen>
 
-    <dimen name="headphone_offset">100dp</dimen>
+    <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
+ https://developer.android.com/design/patterns/navigation-drawer.html -->
+    <dimen name="drawer_width">300dp</dimen>
+
+    <!-- Navigation margins -->
+    <dimen name="navigation_horizontal_margin">16dp</dimen>
 
 </resources>

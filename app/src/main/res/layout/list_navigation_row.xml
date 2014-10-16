@@ -1,0 +1,19 @@
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="68dp"
+    android:background="@drawable/list_direct_navigation_background"
+    android:paddingLeft="@dimen/navigation_horizontal_margin"
+    android:paddingRight="@dimen/navigation_horizontal_margin"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:textColor="@color/dark_grey"
+        android:id="@+id/navigation_title" />
+
+</LinearLayout>
