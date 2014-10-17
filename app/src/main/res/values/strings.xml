@@ -24,16 +24,19 @@
     <string name="bluetooth_scan_fail_message">There has been a critical error with your device. Please check Bluetooth is working and try again</string>
     <string name="bluetooth_scan_fail_dismiss_button">Ok</string>
 
-    <!--Device selection strings-->
+    <!-- Device selection strings -->
     <string name="devices_connected_header">Connected Devices</string>
     <string name="devices_available_header">Available Devices</string>
     <string name="devices_scan_button">Scan</string>
 
-    <!--Connected screen strings-->
+    <!-- Connected screen strings -->
     <string name="connected_successful_string">Connected to headset successfully</string>
 
-    <!--Navigation Drawer-->
+    <!-- Navigation Drawer -->
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="title_activity_music_maps">Map</string>
+
+    <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyC8ETmkPOJfNr0_n6FM0yXUlMOXZhi-uBM</string>
 
 </resources>
