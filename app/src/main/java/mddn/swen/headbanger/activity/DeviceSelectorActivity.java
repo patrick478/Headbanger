@@ -2,23 +2,17 @@ package mddn.swen.headbanger.activity;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.widget.Button;
 
-import butterknife.InjectView;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.fragment.DeviceSelectorFragment;
-import mddn.swen.headbanger.navigation.NavigationDrawerFragment;
 import mddn.swen.headbanger.utilities.BluetoothUtility;
 
 /**
- * Selects a device
+ * Selects a device TODO this class is to be removed
  * Created by John on 9/10/2014.
  */
 public class DeviceSelectorActivity extends Activity implements View.OnClickListener {
@@ -71,8 +65,8 @@ public class DeviceSelectorActivity extends Activity implements View.OnClickList
         if (requestCode == REQUEST_ENABLE_BT) {
 
             /* Failure, the app is now useless */
-            if (resultCode != RESULT_OK && !BluetoothUtility.isBluetoothAvailable()) {
-                BluetoothUtility.bluetoothOffDialog();
+            if (resultCode != RESULT_OK || !BluetoothUtility.isBluetoothAvailable()) {
+                BluetoothUtility.bluetoothOffDialog(this);
             }
 
             /* Inform the fragment that data should be available */
@@ -89,7 +83,7 @@ public class DeviceSelectorActivity extends Activity implements View.OnClickList
 
         /* None exists, the app will be unable to do anything useful */
         if (!BluetoothUtility.isBluetoothAvailable()) {
-            BluetoothUtility.bluetoothUnavailableDialog();
+            BluetoothUtility.bluetoothUnavailableDialog(this);
         }
 
         /* Bluetooth is turned off */

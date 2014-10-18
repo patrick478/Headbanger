@@ -4,17 +4,12 @@ import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
 import mddn.swen.headbanger.R;
-import mddn.swen.headbanger.application.MainApplication;
 
 /**
  * A set of utilities used for querying the current state of the Bluetooth adapter
@@ -85,25 +80,34 @@ public class BluetoothUtility {
     /**
      * Displays a dialog when the user chooses not to turn on their bluetooth - but a bluetooth
      * adapter <i>is actually available</i>.
+     *
+     * @param displayingContext Context to display under
      */
-    public static void bluetoothOffDialog() {
-        Context context = MainApplication.application;
-        new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.bluetooth_off_title))
-                .setMessage(context.getString(R.string.bluetooth_off_message))
-                .setPositiveButton(context.getString(R.string.bluetooth_off_dismiss_button), null)
+    public static void bluetoothOffDialog(Context displayingContext) {
+        if (displayingContext == null) {
+            return;
+        }
+        new AlertDialog.Builder(displayingContext)
+                .setTitle(displayingContext.getString(R.string.bluetooth_off_title))
+                .setMessage(displayingContext.getString(R.string.bluetooth_off_message))
+                .setPositiveButton(displayingContext.getString(R.string.bluetooth_off_dismiss_button), null)
                 .show();
     }
 
     /**
      * Displays a dialog when there is <b>no bluetooth adapter on the device.</b>
+     *
+     * @param displayingContext Context to display under
      */
-    public static void bluetoothUnavailableDialog() {
-        Context context = MainApplication.application;
-        new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.bluetooth_unavailable_title))
-                .setMessage(context.getString(R.string.bluetooth_unavailable_message))
-                .setPositiveButton(context.getString(R.string.bluetooth_unavailable_dismiss_button), null)
+    public static void bluetoothUnavailableDialog(Context displayingContext) {
+        if (displayingContext == null) {
+            return;
+        }
+
+        new AlertDialog.Builder(displayingContext)
+                .setTitle(displayingContext.getString(R.string.bluetooth_unavailable_title))
+                .setMessage(displayingContext.getString(R.string.bluetooth_unavailable_message))
+                .setPositiveButton(displayingContext.getString(R.string.bluetooth_unavailable_dismiss_button), null)
                 .show();
     }
 }
