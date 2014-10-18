@@ -39,7 +39,7 @@ public class ConnectedFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        connectedIcon.setAnimation(null);
+        connectedIcon.clearAnimation();
         ButterKnife.reset(this);
     }
 
@@ -52,12 +52,14 @@ public class ConnectedFragment extends Fragment {
         wiggle.setAnimationListener(new Animation.AnimationListener() {
 
             @Override
-            public void onAnimationEnd(Animation animation) {
+            public void onAnimationEnd(final Animation animation) {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        connectedIcon.setAnimation(null);
-                        beginIconWiggle();
+                        if (connectedIcon != null) {
+                            connectedIcon.clearAnimation();
+                            beginIconWiggle();
+                        }
                     }
                 }, 5000);
             }
