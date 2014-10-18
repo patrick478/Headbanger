@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.util.Log;
 
 import com.facebook.Request;
@@ -123,14 +124,19 @@ public class User {
      */
     private static void loadUserProfilePicture() {
         if (User.user != null) {
-            try {
-                String imageURL;
-                imageURL = "http://graph.facebook.com/" + User.user.getId() + "/picture?type=large";
-                InputStream in = (InputStream) new URL(imageURL).getContent();
-                User.profilePicture = BitmapFactory.decodeStream(in);
-            } catch (Exception e) {
-                Log.e(User.class.toString(), e.toString());
-            }
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        String imageURL;
+                        imageURL = "http://graph.facebook.com/" + User.user.getId() + "/picture?type=large";
+                        InputStream in = (InputStream) new URL(imageURL).getContent();
+                        User.profilePicture = BitmapFactory.decodeStream(in);
+                    } catch (Exception e) {
+                        Log.e(User.class.toString(), e.toString());
+                    }
+                }
+            });
         }
     }
 }
