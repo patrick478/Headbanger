@@ -24,15 +24,15 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-        if (savedInstanceState == null) {
-            loginFragment = (LoginFragment) getFragmentManager()
-                    .findFragmentById(R.id.fragment_login);
-        }
-        if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()) {
-            Session.getActiveSession().closeAndClearTokenInformation(); //TODO don't include this for release
-//            loginSuccessful(); //TODO do include this instead
-        }
+//        setContentView(R.layout.activity_login);
+//        if (savedInstanceState == null) {
+//            loginFragment = (LoginFragment) getFragmentManager()
+//                    .findFragmentById(R.id.fragment_login);
+//        }
+//        if (Session.getActiveSession() != null && Session.getActiveSession().isOpened()) {
+//            Session.getActiveSession().closeAndClearTokenInformation(); //TODO don't include this for release
+////            loginSuccessful(); //TODO do include this instead
+//        }
     }
 
     @Override

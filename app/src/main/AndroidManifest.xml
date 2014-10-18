@@ -34,10 +34,6 @@
         </activity>
 
         <!-- To be removed -->
-        <activity
-            android:name=".activity.MusicMapsActivity"
-            android:label="@string/title_activity_music_maps" >
-        </activity>
 
         <!--App meta-data -->
         <meta-data

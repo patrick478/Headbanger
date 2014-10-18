@@ -13,12 +13,12 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
-        /**
-* Created by everitma on 14/10/14.
-*
-* A class for getting user latest location.
-* Also can prompt user to turn on GPS in settings.
-*/
+/**
+ * Created by everitma on 14/10/14.
+ *
+ * A class for getting user latest location.
+ * Also can prompt user to turn on GPS in settings.
+ */
 
 public class GPSTracker extends Service implements LocationListener {
 

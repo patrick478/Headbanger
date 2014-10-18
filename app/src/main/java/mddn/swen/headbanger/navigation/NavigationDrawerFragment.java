@@ -27,6 +27,7 @@ import butterknife.InjectView;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.fragment.ConnectedFragment;
 import mddn.swen.headbanger.fragment.LoginFragment;
+import mddn.swen.headbanger.fragment.MusicMapFragment;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -151,7 +152,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                     item = new NavigationDrawerItem(
                             "MAP",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
-                            ConnectedFragment.class); //TODO a map fragment
+                            MusicMapFragment.class);
                     break;
                 case ACCOUNT:
                     item = new NavigationDrawerItem(
