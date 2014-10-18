@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.facebook.Request;
@@ -12,10 +13,12 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
 import mddn.swen.headbanger.R;
+import mddn.swen.headbanger.application.MainApplication;
 
 /**
  * A utility that controls the current user state.
@@ -51,7 +54,7 @@ public class User {
      * Check to see if any user object exists - if one does, attempt to reauth with the server.
      */
     public static void resume() {
-        if (isOpenSessionAvailable()) {
+        if (isOpenFBSessionAvailable()) {
             requestUser(null); //Silently fail
         }
         else {
@@ -64,7 +67,7 @@ public class User {
      *
      * @return True if a FB session is available
      */
-    public static boolean isOpenSessionAvailable() {
+    public static boolean isOpenFBSessionAvailable() {
         return Session.getActiveSession() != null && Session.getActiveSession().isOpened();
     }
 
@@ -72,7 +75,7 @@ public class User {
      * To be called once Facebook returns, checks the current login state.
      */
     public static void login(Context context) {
-        if (isOpenSessionAvailable()) {
+        if (isOpenFBSessionAvailable()) {
             requestUser(context);
         }
         else {
@@ -86,9 +89,12 @@ public class User {
     public static void logout() {
         User.user = null;
         User.profilePicture = null;
-        if (Session.getActiveSession() != null) { //We don't care if its open or not, just kill it
-            Session.getActiveSession().closeAndClearTokenInformation();
+        Session activeSession = Session.getActiveSession();
+        if (activeSession == null) {
+            activeSession = new Session(MainApplication.application.getApplicationContext());
+            Session.setActiveSession(activeSession);
         }
+        activeSession.closeAndClearTokenInformation();
     }
 
     /**
@@ -116,7 +122,7 @@ public class User {
      * @param listener A listener wanting the profile picture of the current user.
      */
     public static void getProfilePicture(final ProfilePicListener listener) {
-        new Handler().post(new Runnable() {
+        new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -124,13 +130,18 @@ public class User {
                         Thread.sleep(100);
                     }
                     if (listener != null) {
-                        listener.onPicLoaded(User.profilePicture);
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                listener.onPicLoaded(User.profilePicture);
+                            }
+                        });
                     }
                 } catch (Exception e) {
                     Log.e(User.class.toString(), e.toString());
                 }
             }
-        });
+        }).start();
     }
 
     /**
@@ -142,7 +153,7 @@ public class User {
      * @param context The current context for displaying messages, may be null.
      */
     private static void requestUser(final Context context) {
-        if (isOpenSessionAvailable()) {
+        if (isOpenFBSessionAvailable()) {
             Request.newMeRequest(Session.getActiveSession(), new Request.GraphUserCallback() {
 
                 @Override
@@ -159,7 +170,9 @@ public class User {
     }
 
     /**
-     * Display a Facebook login failure dialog
+     * Display a Facebook login failure dialog for the current context
+     *
+     * @param context Context to display the dialog to
      */
     private static void facebookLoginFailureDialog(Context context) {
         logout();
@@ -174,20 +187,20 @@ public class User {
      * Attempts to load the user's profile picture so we won't have to keep doing it.
      */
     private static void loadUserProfilePicture() {
-        if (User.user != null) {
-            new Handler().post(new Runnable() {
+        if (isLoggedIn()) {
+            new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        String imageURL;
-                        imageURL = "http://graph.facebook.com/" + User.user.getId() + "/picture?type=large";
-                        InputStream in = (InputStream) new URL(imageURL).getContent();
-                        User.profilePicture = BitmapFactory.decodeStream(in);
+                        String urlString = "https://graph.facebook.com/" + User.user.getId() + "/picture?type=large";
+                        URL url = new URL(urlString);
+                        BufferedInputStream bufferedStream = new BufferedInputStream(url.openConnection().getInputStream());
+                        User.profilePicture = BitmapFactory.decodeStream(bufferedStream);
                     } catch (Exception e) {
                         Log.e(User.class.toString(), e.toString());
                     }
                 }
-            });
+            }).start();
         }
     }
 }
