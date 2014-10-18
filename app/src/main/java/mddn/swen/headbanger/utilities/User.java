@@ -11,6 +11,7 @@ import android.util.Log;
 import com.facebook.Request;
 import com.facebook.Response;
 import com.facebook.Session;
+import com.facebook.SessionState;
 import com.facebook.model.GraphUser;
 
 import java.io.BufferedInputStream;
@@ -53,8 +54,11 @@ public class User {
      * Check to see if any user object exists - if one does, attempt to reauth with the server.
      */
     public static void resume() {
+        if (Session.getActiveSession() == null) {
+            Session.openActiveSessionFromCache(MainApplication.application.getApplicationContext());
+        }
         if (isOpenFBSessionAvailable()) {
-            requestUser(null); //Silently fail
+            requestUser(null);
         }
         else {
             logout();
