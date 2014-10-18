@@ -33,8 +33,4 @@ public class MainApplication extends Application {
         super.onCreate();
         User.resume();
     }
-
-    public void onResume() {
-        User.resume();
-    }
 }

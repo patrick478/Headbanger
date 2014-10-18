@@ -48,8 +48,7 @@ public class User {
     private static Bitmap profilePicture;
 
     /**
-     * Called by {@link mddn.swen.headbanger.application.MainApplication} when the application
-     * is starting or resuming from a background state.
+     * Called when the application is starting or resuming from a background state.
      *
      * Check to see if any user object exists - if one does, attempt to reauth with the server.
      */

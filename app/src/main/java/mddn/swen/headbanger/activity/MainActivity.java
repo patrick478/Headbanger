@@ -50,6 +50,12 @@ public class MainActivity extends Activity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        User.resume();
+    }
+
+    @Override
     public void onBackPressed() {
         if (navigationDrawerFragment.isDrawerOpen()) {
             drawerLayout.closeDrawer(GravityCompat.START);
