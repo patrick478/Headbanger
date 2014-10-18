@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import com.facebook.Request;
 import com.facebook.Response;
@@ -128,6 +129,7 @@ public class User {
                 InputStream in = (InputStream) new URL(imageURL).getContent();
                 User.profilePicture = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
+                Log.e(User.class.toString(), e.toString());
             }
         }
     }
