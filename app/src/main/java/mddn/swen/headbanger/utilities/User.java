@@ -92,6 +92,24 @@ public class User {
     }
 
     /**
+     * Access for the current {@link com.facebook.model.GraphUser}
+     *
+     * @return The current user, or null if none available.
+     */
+    public static GraphUser getGraphUser() {
+        return user;
+    }
+
+    /**
+     * Convenience method to determine if the user is presently logged in or not
+     *
+     * @return True if a {@link mddn.swen.headbanger.utilities.User#getGraphUser()} returns not null
+     */
+    public static boolean isLoggedIn() {
+        return getGraphUser() != null;
+    }
+
+    /**
      * Only way to access the profile picture safely. Listener will be informed when the profile
      * picture becomes available - could be immediately.
      *

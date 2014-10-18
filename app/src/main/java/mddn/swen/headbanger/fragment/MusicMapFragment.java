@@ -1,6 +1,8 @@
 package mddn.swen.headbanger.fragment;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +19,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.utilities.GPSTracker;
+import mddn.swen.headbanger.utilities.User;
 
 /**
  * Fine grained control over the map fragment
@@ -53,14 +56,44 @@ public class MusicMapFragment extends Fragment {
      * Begin processing the map
      */
     private void setUpMap() {
-        LatLng cLatLng;
+        final LatLng cLatLng;
         if(gpsTracker.canGetLocation()) {
             cLatLng = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(cLatLng, 15);
             map.animateCamera(cameraUpdate);
+            final MarkerOptions marker = emptyMarker().position(cLatLng);
+            map.addMarker(marker);
 
-            /* TODO use the current facebook user's profile pic */
-            map.addMarker(new MarkerOptions().position(cLatLng).title("You").icon(BitmapDescriptorFactory.fromResource(R.drawable.nowplayingimage)).anchor(0.5f, 0.5f));
+            /* Check if the user is available */
+            if (User.isLoggedIn()) {
+
+                /* Assign their actual name */
+                marker.title(User.getGraphUser().getName());
+
+                /* Attempt to load in their profile picture */
+                User.getProfilePicture(new User.ProfilePicListener() {
+                    @Override
+                    public void onPicLoaded(Bitmap profilePic) {
+                        marker.icon(BitmapDescriptorFactory.fromBitmap(profilePic));
+                    }
+                });
+            }
         }
+    }
+
+    /**
+     * Helper method to return a simple empty map marker with a default title:
+     * {@link mddn.swen.headbanger.R.string#map_marker_placeholder_title}
+     *
+     * And a default image:
+     * {@link mddn.swen.headbanger.R.drawable#nowplayingimage}
+     *
+     * @return An empty default map marker.
+     */
+    private MarkerOptions emptyMarker() {
+        return new MarkerOptions()
+                .title(getString(R.string.map_marker_placeholder_title))
+                .icon(BitmapDescriptorFactory.fromResource(R.drawable.nowplayingimage))
+                .anchor(0.5f, 0.5f);
     }
 }

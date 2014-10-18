@@ -37,6 +37,10 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="title_activity_music_maps">Map</string>
 
+    <!--Maps Key-->
     <string name="google_maps_key" templateMergeStrategy="preserve">AIzaSyC8ETmkPOJfNr0_n6FM0yXUlMOXZhi-uBM</string>
+
+    <!--Empty map marker place holder-->
+    <string name="map_marker_placeholder_title">-</string>
 
 </resources>
