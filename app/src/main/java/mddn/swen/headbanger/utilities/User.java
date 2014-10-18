@@ -192,9 +192,11 @@ public class User {
                 @Override
                 public void run() {
                     try {
-                        String urlString = "https://graph.facebook.com/" + User.user.getId() + "/picture?type=large";
+                        String urlString = "https://graph.facebook.com/" +
+                                User.user.getId() + "/picture?type=large";
                         URL url = new URL(urlString);
-                        BufferedInputStream bufferedStream = new BufferedInputStream(url.openConnection().getInputStream());
+                        InputStream inputStream = url.openConnection().getInputStream();
+                        BufferedInputStream bufferedStream = new BufferedInputStream(inputStream);
                         User.profilePicture = BitmapFactory.decodeStream(bufferedStream);
                     } catch (Exception e) {
                         Log.e(User.class.toString(), e.toString());
