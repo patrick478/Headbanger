@@ -7,13 +7,20 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 
+import com.facebook.Session;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import mddn.swen.headbanger.R;
-import mddn.swen.headbanger.fragment.ConnectedFragment;
+import mddn.swen.headbanger.fragment.MainFragment;
 import mddn.swen.headbanger.navigation.NavigationDrawerFragment;
+import mddn.swen.headbanger.utilities.User;
 
-public class ConnectedActivity extends Activity {
+/**
+ * The root activity for the app that holds the navigation drawer and swaps its fragments out
+ * each time a screen is "changed"
+ */
+public class MainActivity extends Activity {
 
     /**
      * The drawer layout containing both views
@@ -29,7 +36,7 @@ public class ConnectedActivity extends Activity {
     /**
      * The fragment for this activity
      */
-    private ConnectedFragment connectedFragment;
+    private MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,14 @@ public class ConnectedActivity extends Activity {
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("REQUEST CODE " + requestCode);
+        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+        User.facebookDidReturn(this);
     }
 
     /**
