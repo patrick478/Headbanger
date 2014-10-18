@@ -63,7 +63,7 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Session.DEFAULT_AUTHORIZE_ACTIVITY_CODE) {
             Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-            User.facebookDidReturn(this);
+            User.login(this);
         }
     }
 

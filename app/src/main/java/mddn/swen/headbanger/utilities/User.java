@@ -18,11 +18,18 @@ import java.net.URL;
 import mddn.swen.headbanger.R;
 
 /**
- * A utility that control the current user state and authentication.
+ * A utility that controls the current user state.
  *
  * Created by John on 18/10/2014.
  */
 public class User {
+
+    /**
+     * Interface listener for when a user's profile picture becomes available
+     */
+    public interface ProfilePicListener {
+        public void onPicLoaded(Bitmap profilePic);
+    }
 
     /**
      * The Facebook graph user
@@ -30,10 +37,12 @@ public class User {
     private static GraphUser user;
 
     /**
-     * When the user logs in, this is immediately fetched and referenced. If it has not
-     * yet loaded set a profile availability listener. TODO need a listener...
+     * When the user logs in, this is immediately fetched and referenced.
+     *
+     * External callers access this by assigning themselves as a
+     * {@link mddn.swen.headbanger.utilities.User.ProfilePicListener}.
      */
-    public static Bitmap profilePicture;
+    private static Bitmap profilePicture;
 
     /**
      * Called by {@link mddn.swen.headbanger.application.MainApplication} when the application
@@ -62,7 +71,7 @@ public class User {
     /**
      * To be called once Facebook returns, checks the current login state.
      */
-    public static void facebookDidReturn(Context context) {
+    public static void login(Context context) {
         if (isOpenSessionAvailable()) {
             requestUser(context);
         }
@@ -80,6 +89,30 @@ public class User {
         if (Session.getActiveSession() != null) { //We don't care if its open or not, just kill it
             Session.getActiveSession().closeAndClearTokenInformation();
         }
+    }
+
+    /**
+     * Only way to access the profile picture safely. Listener will be informed when the profile
+     * picture becomes available - could be immediately.
+     *
+     * @param listener A listener wanting the profile picture of the current user.
+     */
+    public static void getProfilePicture(final ProfilePicListener listener) {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    while (User.profilePicture == null) {
+                        Thread.sleep(100);
+                    }
+                    if (listener != null) {
+                        listener.onPicLoaded(User.profilePicture);
+                    }
+                } catch (Exception e) {
+                    Log.e(User.class.toString(), e.toString());
+                }
+            }
+        });
     }
 
     /**
