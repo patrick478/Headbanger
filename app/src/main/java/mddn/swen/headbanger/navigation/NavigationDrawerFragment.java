@@ -190,7 +190,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
 
         /* ActionBarDrawerToggle ties together the the proper interactions
          * between the navigation drawer and the action bar app icon. */
-        drawerToggle = new PricemakerActionBarToggle(
+        drawerToggle = new HeadbangerActionBarToggle(
                 getActivity(),                    /* host Activity */
                 drawerLayout,                    /* DrawerLayout object */
                 R.drawable.ic_drawer,             /* nav drawer image to replace 'Up' caret */
