@@ -11,7 +11,7 @@
 
         <!-- Main activity displayed on start -->
         <activity
-            android:name=".activity.ConnectedActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name" >
 
             <intent-filter>

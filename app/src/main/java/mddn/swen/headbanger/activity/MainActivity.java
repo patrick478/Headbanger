@@ -61,9 +61,10 @@ public class MainActivity extends Activity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("REQUEST CODE " + requestCode);
-        Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-        User.facebookDidReturn(this);
+        if (requestCode == Session.DEFAULT_AUTHORIZE_ACTIVITY_CODE) {
+            Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+            User.facebookDidReturn(this);
+        }
     }
 
     /**
