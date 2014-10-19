@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.KeyEvent;
 
 import com.facebook.Session;
+import com.facebook.model.GraphUser;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -30,7 +31,7 @@ public class MainActivity extends Activity {
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    protected NavigationDrawerFragment navigationDrawerFragment;
+    private NavigationDrawerFragment navigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,8 +65,25 @@ public class MainActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Session.DEFAULT_AUTHORIZE_ACTIVITY_CODE) {
             Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
-            User.login(this);
+            User.login(this, new User.UserLoggedInListener() {
+                @Override
+                public void onLogin(boolean loggedIn, GraphUser user) {
+                    if (loggedIn) {
+                        navigationDrawerFragment.refreshFragment();
+                    }
+                }
+            });
         }
+    }
+
+    /**
+     * Returns the current navigation drawer fragment
+     *
+     * @return The {@link mddn.swen.headbanger.navigation.NavigationDrawerFragment} for this
+     * instance.
+     */
+    public NavigationDrawerFragment getDrawer() {
+        return navigationDrawerFragment;
     }
 
     /**

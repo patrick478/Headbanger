@@ -29,6 +29,7 @@ import mddn.swen.headbanger.fragment.ConnectedDeviceFragment;
 import mddn.swen.headbanger.fragment.LoginFragment;
 import mddn.swen.headbanger.fragment.MusicMapFragment;
 import mddn.swen.headbanger.fragment.UserSettingsFragment;
+import mddn.swen.headbanger.utilities.User;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -159,13 +160,22 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                     item = new NavigationDrawerItem(
                             "MY ACCOUNT",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
-                            UserSettingsFragment.class);
+                            User.isLoggedIn() ? UserSettingsFragment.class : LoginFragment.class);
                     break;
                 default:
                     item = null;
             }
             items.add(item);
         }
+    }
+
+    /**
+     * Rebuilds the navigation drawer and rebuilds the currently selected index.
+     */
+    public void refreshFragment() {
+        setupItems();
+        drawerAdapter.notifyDataSetChanged();
+        onNavigationDrawerItemSelected(currentSelectedPosition);
     }
 
     /**
@@ -372,15 +382,6 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                 .commit();
     }
 
-    /**
-     * Will return the currently selected position in the navigation drawer.
-     *
-     * @return The currently selected position on the navigation drawer
-     */
-    public int getCurrentSelectedPosition() {
-        return currentSelectedPosition;
-    }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (position >= items.size()
@@ -388,10 +389,6 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
             return;
         }
         selectItem(position);
-    }
-
-    public ActionBarDrawerToggle getDrawerToggle() {
-        return drawerToggle;
     }
 
     /**

@@ -1,7 +1,6 @@
 package mddn.swen.headbanger.utilities;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
 import android.preference.Preference;
@@ -11,13 +10,16 @@ import android.preference.PreferenceScreen;
 
 import mddn.swen.headbanger.BuildConfig;
 import mddn.swen.headbanger.R;
+import mddn.swen.headbanger.activity.MainActivity;
 
-import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.*;
+import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_BUILD;
+import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_SIGN_OUT;
+import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.EDITTEXT_DISPLAY_NAME;
 
 public class UserSettingsController {
 
     /* Context to build under */
-    private Context context;
+    private MainActivity mainActivity;
 
     /**
      * Used to enumerate the type of Preference to be displayed
@@ -44,66 +46,61 @@ public class UserSettingsController {
     /**
      * Build the instance of the settings controller.
      *
-     * @param context   The context to build for
-     * @param screen    The preference screen to attach to
+     * @param mainActivity The context to build for
+     * @param screen       The preference screen to attach to
      */
-    public UserSettingsController(Context context, PreferenceScreen screen) {
-        this.context = context;
-        addGeneralInfo(screen, context);
-        addManage(screen, context);
-        addAbout(screen, context);
+    public UserSettingsController(MainActivity mainActivity, PreferenceScreen screen) {
+        this.mainActivity = mainActivity;
+        addGeneralInfo(screen);
+        addManage(screen);
+        addAbout(screen);
     }
 
     /**
      * Adds the general information section
      *
-     * @param context   The context to build for
      * @param screen    The preference screen to attach to
      */
-    private void addGeneralInfo(PreferenceScreen screen, Context context) {
-        PreferenceCategory generalCategory = new PreferenceCategory(context);
+    private void addGeneralInfo(PreferenceScreen screen) {
+        PreferenceCategory generalCategory = new PreferenceCategory(mainActivity);
         screen.addPreference(generalCategory);
         generalCategory.setTitle(R.string.settings_cat_general);
-        addButton(generalCategory, context, EDITTEXT_DISPLAY_NAME, User.getGraphUser().getName());
+        addButton(generalCategory, EDITTEXT_DISPLAY_NAME, User.getGraphUser().getName());
     }
 
     /**
      * Adds the account management section
      *
-     * @param context   The context to build for
      * @param screen    The preference screen to attach to
      */
-    private void addManage(PreferenceScreen screen, Context context) {
-        PreferenceCategory manageCategory = new PreferenceCategory(context);
+    private void addManage(PreferenceScreen screen) {
+        PreferenceCategory manageCategory = new PreferenceCategory(mainActivity);
         screen.addPreference(manageCategory);
         manageCategory.setTitle(R.string.settings_cat_manage);
-        addButton(manageCategory, context, BUTTON_SIGN_OUT, null);
+        addButton(manageCategory, BUTTON_SIGN_OUT, null);
     }
 
     /**
      * Adds the app about section
      *
-     * @param context   The context to build for
      * @param screen    The preference screen to attach to
      */
-    private void addAbout(PreferenceScreen screen, Context context) {
-        PreferenceCategory aboutCategory = new PreferenceCategory(context);
+    private void addAbout(PreferenceScreen screen) {
+        PreferenceCategory aboutCategory = new PreferenceCategory(mainActivity);
         screen.addPreference(aboutCategory);
         aboutCategory.setTitle(R.string.settings_cat_about);
-        addButton(aboutCategory, context, BUTTON_BUILD, getBuildString());
+        addButton(aboutCategory, BUTTON_BUILD, getBuildString());
     }
 
     /**
      * Helper function to add a button to the preferences pane
      *
      * @param parent  The group this will belong to
-     * @param context The context to build under
      * @param pref    The preference this is building for
      * @param value   The current value of the preference
      */
-    private void addButton(PreferenceGroup parent, Context context, final HeadbangerPreference pref,
-                           String value) {
-        Preference preference = new Preference(context);
+    private void addButton(PreferenceGroup parent, final HeadbangerPreference pref, String value) {
+        Preference preference = new Preference(mainActivity);
         preference.setTitle(pref.resId);
         if (value != null) {
             preference.setSummary(value);
@@ -140,17 +137,17 @@ public class UserSettingsController {
      * Displays an input field that allows the user to modify their display name
      */
     private void showEditDisplayName() {
-
+//TODO
     }
 
     /**
      * Called when the user elects to sign out
      */
     private void showSignOutConfirmation() {
-        if (context == null) {
+        if (mainActivity == null) {
             return;
         }
-        new AlertDialog.Builder(context)
+        new AlertDialog.Builder(mainActivity)
                 .setTitle(R.string.settings_confirm_sign_out_title)
                 .setMessage(R.string.settings_confirm_sign_out_descriptor)
                 .setCancelable(true)
@@ -158,6 +155,7 @@ public class UserSettingsController {
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 User.logout();
+                                mainActivity.getDrawer().refreshFragment();
                             }
                         })
                 .setNegativeButton(R.string.settings_confirm_sign_out_negative, null)

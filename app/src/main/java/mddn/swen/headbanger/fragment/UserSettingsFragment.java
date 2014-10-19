@@ -6,6 +6,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceScreen;
 import android.util.Log;
 
+import mddn.swen.headbanger.activity.MainActivity;
 import mddn.swen.headbanger.utilities.UserSettingsController;
 
 /**
@@ -24,7 +25,7 @@ public class UserSettingsFragment extends PreferenceFragment implements Preferen
         super.onCreate(savedInstanceState);
         PreferenceScreen prefs = getPreferenceManager().createPreferenceScreen(getActivity());
         prefs.setOnPreferenceChangeListener(this);
-        controller = new UserSettingsController(getActivity(), prefs);
+        controller = new UserSettingsController((MainActivity) getActivity(), prefs);
         setPreferenceScreen(prefs);
     }
 

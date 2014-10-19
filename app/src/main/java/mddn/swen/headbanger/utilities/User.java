@@ -35,6 +35,13 @@ public class User {
     }
 
     /**
+     * Listener for when the user successfully logs in
+     */
+    public interface UserLoggedInListener {
+        public void onLogin(boolean loggedIn, GraphUser user);
+    }
+
+    /**
      * The Facebook graph user
      */
     private static GraphUser user;
@@ -57,7 +64,7 @@ public class User {
             Session.openActiveSessionFromCache(MainApplication.application.getApplicationContext());
         }
         if (isOpenFBSessionAvailable()) {
-            requestUser(null);
+            requestUser(null, null);
         }
         else {
             logout();
@@ -75,12 +82,18 @@ public class User {
 
     /**
      * To be called once Facebook returns, checks the current login state.
+     *
+     * @param context       Context to execute under
+     * @param loginListener Listener for when the login process completes. May be null.
      */
-    public static void login(Context context) {
+    public static void login(Context context, UserLoggedInListener loginListener) {
         if (isOpenFBSessionAvailable()) {
-            requestUser(context);
+            requestUser(context, loginListener);
         }
         else {
+            if (loginListener != null) {
+                loginListener.onLogin(false, null);
+            }
             facebookLoginFailureDialog(context);
         }
     }
@@ -112,9 +125,10 @@ public class User {
      * Convenience method to determine if the user is presently logged in or not
      *
      * @return True if a {@link mddn.swen.headbanger.utilities.User#getGraphUser()} returns not null
+     * or {@link mddn.swen.headbanger.utilities.User#isOpenFBSessionAvailable()} returns true.
      */
     public static boolean isLoggedIn() {
-        return getGraphUser() != null;
+        return getGraphUser() != null || isOpenFBSessionAvailable();
     }
 
     /**
@@ -152,9 +166,10 @@ public class User {
      *
      * Providing a context will allow the app to display failure messages.
      *
-     * @param context The current context for displaying messages, may be null.
+     * @param context       The current context for displaying messages, may be null.
+     * @param loginListener Listener for when the login process completes. May be null.
      */
-    private static void requestUser(final Context context) {
+    private static void requestUser(final Context context, final UserLoggedInListener loginListener) {
         if (isOpenFBSessionAvailable()) {
             Request.newMeRequest(Session.getActiveSession(), new Request.GraphUserCallback() {
 
@@ -162,8 +177,14 @@ public class User {
                 public void onCompleted(GraphUser user, Response response) {
                     User.user = user;
                     if (user != null) {
+                        if (loginListener != null) {
+                            loginListener.onLogin(true, user);
+                        }
                         loadUserProfilePicture();
                     } else {
+                        if (loginListener != null) {
+                            loginListener.onLogin(false, null);
+                        }
                         facebookLoginFailureDialog(context);
                     }
                 }

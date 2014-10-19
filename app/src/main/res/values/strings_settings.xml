@@ -9,7 +9,6 @@
 
     <!--Category titles-->
     <string name="settings_cat_general">General</string>
-    <string name="settings_cat_general_positive">Save</string>
     <string name="settings_cat_manage">Account</string>
     <string name="settings_cat_about">About</string>
 
@@ -19,8 +18,5 @@
 
     <!--Build information-->
     <string name="settings_pref_build">Build Information</string>
-
-    <!-- Errors -->
-    <string name="settings_error_notification_not_saved">Failed to update notification settings.</string>
 
 </resources>
