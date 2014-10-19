@@ -47,6 +47,7 @@ public class MainActivity extends Activity {
                 .findFragmentById(R.id.navigation_drawer);
         navigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
         navigationDrawerFragment.selectItem(0);
+        navigationDrawerFragment.checkIfUserLearnedDrawer();
     }
 
     @Override
