@@ -28,6 +28,7 @@ import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.fragment.ConnectedDeviceFragment;
 import mddn.swen.headbanger.fragment.LoginFragment;
 import mddn.swen.headbanger.fragment.MusicMapFragment;
+import mddn.swen.headbanger.fragment.UserSettingsFragment;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -158,7 +159,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                     item = new NavigationDrawerItem(
                             "MY ACCOUNT",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
-                            LoginFragment.class);
+                            UserSettingsFragment.class);
                     break;
                 default:
                     item = null;

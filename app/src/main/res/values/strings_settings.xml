@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--Sign out button-->
+    <string name="settings_confirm_sign_out_descriptor">Are you sure you want to sign out?</string>
+    <string name="settings_confirm_sign_out_positive">Yes</string>
+    <string name="settings_confirm_sign_out_negative">Cancel</string>
+    <string name="settings_confirm_sign_out_title">Confirm sign out</string>
+
+    <!--Category titles-->
+    <string name="settings_cat_general">General</string>
+    <string name="settings_cat_general_positive">Save</string>
+    <string name="settings_cat_manage">Account</string>
+    <string name="settings_cat_about">About</string>
+
+    <!--Button titles-->
+    <string name="settings_pref_display_name">Display Name</string>
+    <string name="settings_pref_sign_out">Sign Out</string>
+
+    <!--Build information-->
+    <string name="settings_pref_build">Build Information</string>
+
+    <!-- Errors -->
+    <string name="settings_error_notification_not_saved">Failed to update notification settings.</string>
+
+</resources>

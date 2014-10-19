@@ -43,4 +43,7 @@
     <!--Empty map marker place holder-->
     <string name="map_marker_placeholder_title">-</string>
 
+    <!--Settings screen-->
+    <string name="user_settings_title">Settings</string>
+
 </resources>
