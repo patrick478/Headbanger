@@ -12,7 +12,6 @@ import com.facebook.Session;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import mddn.swen.headbanger.R;
-import mddn.swen.headbanger.fragment.MainFragment;
 import mddn.swen.headbanger.navigation.NavigationDrawerFragment;
 import mddn.swen.headbanger.utilities.User;
 
@@ -32,11 +31,6 @@ public class MainActivity extends Activity {
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     protected NavigationDrawerFragment navigationDrawerFragment;
-
-    /**
-     * The fragment for this activity
-     */
-    private MainFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

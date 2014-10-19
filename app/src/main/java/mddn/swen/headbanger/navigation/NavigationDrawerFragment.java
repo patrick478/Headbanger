@@ -25,7 +25,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import mddn.swen.headbanger.R;
-import mddn.swen.headbanger.fragment.MainFragment;
+import mddn.swen.headbanger.fragment.ConnectedDeviceFragment;
 import mddn.swen.headbanger.fragment.LoginFragment;
 import mddn.swen.headbanger.fragment.MusicMapFragment;
 
@@ -146,7 +146,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                     item = new NavigationDrawerItem(
                             "DASHBOARD",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
-                            MainFragment.class);
+                            ConnectedDeviceFragment.class);
                     break;
                 case MAP:
                     item = new NavigationDrawerItem(

@@ -22,7 +22,7 @@ import mddn.swen.headbanger.R;
 /**
  * Is displayed when the application has successfully connected with a device
  */
-public class MainFragment extends Fragment {
+public class ConnectedDeviceFragment extends Fragment {
 
     /* The headphones icon */
     @InjectView(R.id.headbanger_connected_icon)
