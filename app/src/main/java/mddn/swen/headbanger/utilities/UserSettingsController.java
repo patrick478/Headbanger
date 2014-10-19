@@ -137,7 +137,7 @@ public class UserSettingsController {
      * Displays an input field that allows the user to modify their display name
      */
     private void showEditDisplayName() {
-//TODO
+        //TODO pop an alert dialog with an editable text field that allows the user to configure their map display name
     }
 
     /**
