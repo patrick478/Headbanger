@@ -9,11 +9,22 @@
     android:orientation="vertical"
     tools:context=".RootActivity">
 
-    <fragment android:id="@+id/fragment_device_selector"
+    <!--TODO delete this: <fragment android:id="@+id/fragment_device_selector"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="1"-->
+        <!--android:name="mddn.swen.headbanger.fragment.DeviceSelectorFragment" />-->
+
+    <!-- TODO: add image icon (preferably animated) for indicating connection status -->
+
+    <TextView
+        android:id="@+id/headset_connection_status"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:name="mddn.swen.headbanger.fragment.DeviceSelectorFragment" />
+        android:text="@string/headset_searching"
+        android:gravity="center"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"

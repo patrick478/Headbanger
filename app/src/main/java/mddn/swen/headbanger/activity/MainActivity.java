@@ -2,13 +2,20 @@ package mddn.swen.headbanger.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
+
+import java.security.MessageDigest;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,6 +50,18 @@ public class MainActivity extends Activity {
         navigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
         navigationDrawerFragment.selectItem(0);
         navigationDrawerFragment.checkIfUserLearnedDrawer();
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("mddn.swen.headbanger", PackageManager.GET_SIGNATURES);
+
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch(Exception e) {}
+
+
     }
 
     @Override
