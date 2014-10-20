@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -69,6 +70,16 @@ public class MainActivity extends Activity {
         iF.addAction("com.android.music.queuechanged");
 
         registerReceiver(mReceiver, iF);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                navigationDrawerFragment.openDrawer();
+                return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {

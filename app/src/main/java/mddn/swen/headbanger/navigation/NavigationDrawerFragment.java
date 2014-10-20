@@ -127,6 +127,15 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     }
 
     /**
+     * Programatically open the navigation drawer
+     */
+    public void openDrawer() {
+        if (!isDrawerOpen()) {
+            drawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+
+    /**
      * Setup the navigation items in the panel
      */
     private void setupItems() {
