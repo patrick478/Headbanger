@@ -52,7 +52,7 @@ public class User {
      * External callers access this by assigning themselves as a
      * {@link mddn.swen.headbanger.utilities.User.ProfilePicListener}.
      */
-    private static Bitmap profilePicture;
+    public static Bitmap profilePicture;
 
     /**
      * Called when the application is starting or resuming from a background state.
