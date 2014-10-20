@@ -82,22 +82,6 @@ public class MainActivity extends Activity {
         iF.addAction("com.android.music.queuechanged");
 
         registerReceiver(mReceiver, iF);
-
-        System.out.println("YO");
-        try {
-            PackageInfo info = getPackageManager().getPackageInfo(
-                    "mddn.swen.headbanger",
-                    PackageManager.GET_SIGNATURES);
-            for (Signature signature : info.signatures) {
-                MessageDigest md = MessageDigest.getInstance("SHA");
-                md.update(signature.toByteArray());
-                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
-            }
-        } catch (PackageManager.NameNotFoundException e) {
-
-        } catch (NoSuchAlgorithmException e) {
-
-        }
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
