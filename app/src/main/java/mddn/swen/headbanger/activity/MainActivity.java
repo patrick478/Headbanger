@@ -2,31 +2,18 @@ package mddn.swen.headbanger.activity;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
-import android.media.AudioManager;
-import android.media.RemoteControlClient;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Base64;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
-
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -140,19 +127,6 @@ public class MainActivity extends Activity {
      */
     public NavigationDrawerFragment getDrawer() {
         return navigationDrawerFragment;
-    }
-
-    /**
-     * Some psuedo-code on how to send a "touch" event.
-     *
-     * Supposedly works on Google music, untested Spotify
-     *
-     * http://stackoverflow.com/questions/2659148/possible-to-skip-track-from-an-android-application
-     *
-     * Apps can ignore this event potentially, would be nice if Spotify didn't but I bet they do.
-     */
-    public void onSomeFunkyBTInput(View oView) {
-        AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
     }
 
     public void playPause(View oView){
