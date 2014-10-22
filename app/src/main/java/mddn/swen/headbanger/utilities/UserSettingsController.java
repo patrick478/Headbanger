@@ -122,22 +122,12 @@ public class UserSettingsController {
      */
     private void onButtonClick(HeadbangerPreference preference) {
         switch (preference) {
-            case EDITTEXT_DISPLAY_NAME:
-                showEditDisplayName();
-                break;
             case BUTTON_SIGN_OUT:
                 showSignOutConfirmation();
                 break;
             default:
                 break;
         }
-    }
-
-    /**
-     * Displays an input field that allows the user to modify their display name
-     */
-    private void showEditDisplayName() {
-        //TODO pop an alert dialog with an editable text field that allows the user to configure their map display name
     }
 
     /**

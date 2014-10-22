@@ -13,9 +13,13 @@ import com.facebook.Response;
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
 
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.application.MainApplication;
@@ -52,7 +56,7 @@ public class User {
      * External callers access this by assigning themselves as a
      * {@link mddn.swen.headbanger.utilities.User.ProfilePicListener}.
      */
-    private static Bitmap profilePicture;
+    public static Bitmap profilePicture;
 
     /**
      * Called when the application is starting or resuming from a background state.
@@ -180,6 +184,7 @@ public class User {
                         if (loginListener != null) {
                             loginListener.onLogin(true, user);
                         }
+                        syncLoginWithServer();
                         loadUserProfilePicture();
                     } else {
                         if (loginListener != null) {
@@ -190,6 +195,29 @@ public class User {
                 }
             }).executeAsync();
         }
+    }
+
+    /**
+     * Attempts to login the user with the server.
+     */
+    private static void syncLoginWithServer() {
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("access_token", Session.getActiveSession().getAccessToken());
+        Networker.openConnection("/login.php", params, new Networker.ConnectionListener() {
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    if (response != null) {
+                        JSONObject payload = response.getJSONObject("payload");
+                        if (payload.has("error")) {
+                            Log.e(User.class.toString(), "Login Error: " + payload.getString("error"));
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 
     /**

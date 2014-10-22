@@ -23,6 +23,7 @@ public class ConnectedDeviceFragment extends Fragment {
     @InjectView(R.id.headbanger_connected_icon)
     ImageView connectedIcon;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_connected, container, false);
@@ -70,4 +71,6 @@ public class ConnectedDeviceFragment extends Fragment {
         });
         connectedIcon.startAnimation(wiggle);
     }
+
+
 }

@@ -1,8 +1,9 @@
 package mddn.swen.headbanger.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
@@ -11,7 +12,9 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.Session;
 import com.facebook.model.GraphUser;
@@ -41,6 +44,19 @@ public class MainActivity extends DeviceControlActivity {
      */
     private NavigationDrawerFragment navigationDrawerFragment;
 
+    public static final String CMDTOGGLEPAUSE = "togglepause";
+    public static final String CMDPAUSE = "pause";
+    public static final String CMDPREVIOUS = "previous";
+    public static final String CMDNEXT = "next";
+    public static final String SERVICECMD = "com.android.music.musicservicecommand";
+    public static final String CMDNAME = "command";
+    public static final String CMDSTOP = "stop";
+
+    public String track;
+    public String album;
+    public String artist;
+    public Boolean playing;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +68,8 @@ public class MainActivity extends DeviceControlActivity {
         navigationDrawerFragment.selectItem(0);
         navigationDrawerFragment.checkIfUserLearnedDrawer();
 
-        this.getActionBar().setHomeButtonEnabled(true);
 
+        /* set up signatures for Facebook login */
         try {
             PackageInfo info = getPackageManager().getPackageInfo("mddn.swen.headbanger", PackageManager.GET_SIGNATURES);
 
@@ -65,7 +81,42 @@ public class MainActivity extends DeviceControlActivity {
         } catch(Exception e) {}
 
 
+        /* set up audio playback control */
+        IntentFilter iF = new IntentFilter();
+        iF.addAction("com.android.music.metachanged");
+        iF.addAction("com.android.music.playstatechanged");
+        iF.addAction("com.android.music.playbackcomplete");
+        iF.addAction("com.android.music.queuechanged");
+
+        registerReceiver(mReceiver, iF);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem menuItem) {
+        switch (menuItem.getItemId()) {
+            case android.R.id.home:
+                navigationDrawerFragment.openDrawer();
+                return true;
+        }
+        return super.onOptionsItemSelected(menuItem);
+    }
+
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            /* Interpret audio control action */
+            String action = intent.getAction();
+            String cmd = intent.getStringExtra("command");
+            Log.v("tag ", action + " / " + cmd);
+            artist = intent.getStringExtra("artist");
+            album = intent.getStringExtra("album");
+            track = intent.getStringExtra("track");
+            playing = intent.getBooleanExtra("playing",false);
+            String nowPlayingInfo = album +"\n"+ track +"\n"+ artist + "\n" + playing;
+            Log.v("tag", artist + ":" + album + ":" + track);
+            Toast.makeText(MainActivity.this, nowPlayingInfo, Toast.LENGTH_SHORT).show();
+        }
+    };
 
     @Override
     protected void onResume() {
@@ -87,6 +138,7 @@ public class MainActivity extends DeviceControlActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Session.DEFAULT_AUTHORIZE_ACTIVITY_CODE) {
             Session.getActiveSession().onActivityResult(this, requestCode, resultCode, data);
+            System.out.println("Session: " + Session.getActiveSession());
             User.login(this, new User.UserLoggedInListener() {
                 @Override
                 public void onLogin(boolean loggedIn, GraphUser user) {
@@ -108,23 +160,24 @@ public class MainActivity extends DeviceControlActivity {
         return navigationDrawerFragment;
     }
 
-    /**
-     * Some psuedo-code on how to send a "touch" event.
-     *
-     * Supposedly works on Google music, untested Spotify
-     *
-     * http://stackoverflow.com/questions/2659148/possible-to-skip-track-from-an-android-application
-     *
-     * Apps can ignore this event potentially, would be nice if Spotify didn't but I bet they do.
-     */
-    public void onSomeFunkyBTInput() {
-        Intent i = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        synchronized (this) {
-            i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_MEDIA_NEXT));
-            sendOrderedBroadcast(i, null);
+    public void playPause(View oView){
+        Intent i = new Intent(SERVICECMD);
+        i.putExtra(CMDNAME, CMDTOGGLEPAUSE);
+        MainActivity.this.sendBroadcast(i);
+        Log.i(CMDNAME, CMDTOGGLEPAUSE);
+    }
 
-            i.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, KeyEvent.KEYCODE_MEDIA_NEXT));
-            sendOrderedBroadcast(i, null);
-        }
+    public void prevSong(View oView){
+        Intent i = new Intent(SERVICECMD);
+        i.putExtra(CMDNAME, CMDPREVIOUS);
+        MainActivity.this.sendBroadcast(i);
+        Log.i(CMDNAME, CMDPREVIOUS);
+    }
+
+    public void nextSong(View oView){
+        Intent i = new Intent(SERVICECMD);
+        i.putExtra(CMDNAME, CMDNEXT);
+        MainActivity.this.sendBroadcast(i);
+        Log.i(CMDNAME, CMDNEXT);
     }
 }

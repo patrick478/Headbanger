@@ -3,7 +3,6 @@
     package="mddn.swen.headbanger" >
 
 
-
     <application
         android:name=".application.MainApplication"
         android:allowBackup="true"
@@ -43,7 +42,6 @@
             android:label="@string/title_facebook_login" >
         </activity>
 
-
         <!-- App meta-data -->
         <meta-data
             android:name="com.google.android.gms.version"
@@ -54,7 +52,6 @@
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/app_id" />
-
 
     </application>
 
