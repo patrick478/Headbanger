@@ -72,7 +72,7 @@ public class SongRatingAdapter extends ArrayAdapter<Object> implements AdapterVi
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String songTitle = "A song title"; //TODO fetch from list
-        Uri uri = Uri.parse("http://www.google.com/#q=" + songTitle);
+        Uri uri = Uri.parse("http://www.youtube.com/results?search_query=" + songTitle);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         getContext().startActivity(intent);
     }
