@@ -49,30 +49,37 @@ public class DeviceScanActivity extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_device_scan);
-        getActionBar().setTitle(R.string.title_scanning);
-        mHandler = new Handler();
-        searchStatusDisplay = (TextView) findViewById(R.id.device_scan_status);
 
-        // Use this check to determine whether BLE is supported on the device.  Then you can
-        // selectively disable BLE-related features.
-        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        final Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
 
-        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-        // BluetoothAdapter through BluetoothManager.
-        final BluetoothManager bluetoothManager =
-                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-        mBluetoothAdapter = bluetoothManager.getAdapter();
+if (false) {
+    setContentView(R.layout.activity_device_scan);
+    getActionBar().setTitle(R.string.title_scanning);
+    mHandler = new Handler();
+    searchStatusDisplay = (TextView) findViewById(R.id.device_scan_status);
 
-        // Checks if Bluetooth is supported on the device.
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+    // Use this check to determine whether BLE is supported on the device.  Then you can
+    // selectively disable BLE-related features.
+    if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+        Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+        finish();
+    }
+
+    // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+    // BluetoothAdapter through BluetoothManager.
+    final BluetoothManager bluetoothManager =
+            (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+    mBluetoothAdapter = bluetoothManager.getAdapter();
+
+    // Checks if Bluetooth is supported on the device.
+    if (mBluetoothAdapter == null) {
+        Toast.makeText(this, R.string.bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+        finish();
+        return;
+    }
+}
     }
 
 //    @Override

@@ -28,6 +28,7 @@ import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.fragment.ConnectedDeviceFragment;
 import mddn.swen.headbanger.fragment.LoginFragment;
 import mddn.swen.headbanger.fragment.MusicMapFragment;
+import mddn.swen.headbanger.fragment.SongRatingFragment;
 import mddn.swen.headbanger.fragment.UserSettingsFragment;
 import mddn.swen.headbanger.utilities.User;
 
@@ -164,6 +165,12 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                             "MAP",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
                             MusicMapFragment.class);
+                    break;
+                case CHARTS:
+                    item = new NavigationDrawerItem(
+                            "CHARTS",
+                            NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
+                            SongRatingFragment.class);
                     break;
                 case ACCOUNT:
                     item = new NavigationDrawerItem(
@@ -406,18 +413,11 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     public enum NavigationEndpoint {
         DASHBOARD,
         MAP,
+        CHARTS,
         ACCOUNT;
 
         public static int getItemPosition(NavigationEndpoint endpoint) {
             return Arrays.asList(NavigationEndpoint.values()).indexOf(endpoint);
-        }
-
-        public static NavigationEndpoint getEndpoint(int itemPosition) {
-            if (itemPosition < 0 || itemPosition > NavigationEndpoint.values().length) {
-                return DASHBOARD;
-            } else {
-                return NavigationEndpoint.values()[itemPosition];
-            }
         }
     }
 }
