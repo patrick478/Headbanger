@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "mddn.swen.headbanger"
-        minSdkVersion 15
+        minSdkVersion 18
         targetSdkVersion 20
         versionCode 1
         versionName "1.0"

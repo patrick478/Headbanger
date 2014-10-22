@@ -1,5 +1,6 @@
 package mddn.swen.headbanger.activity;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -27,7 +28,7 @@ import mddn.swen.headbanger.utilities.User;
  * The root activity for the app that holds the navigation drawer and swaps its fragments out
  * each time a screen is "changed"
  */
-public class MainActivity extends Activity {
+public class MainActivity extends DeviceControlActivity {
 
     /**
      * The drawer layout containing both views
@@ -41,7 +42,7 @@ public class MainActivity extends Activity {
     private NavigationDrawerFragment navigationDrawerFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_connected);
         ButterKnife.inject(this);
@@ -50,6 +51,8 @@ public class MainActivity extends Activity {
         navigationDrawerFragment.setUp(R.id.navigation_drawer, drawerLayout);
         navigationDrawerFragment.selectItem(0);
         navigationDrawerFragment.checkIfUserLearnedDrawer();
+
+        this.getActionBar().setHomeButtonEnabled(true);
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo("mddn.swen.headbanger", PackageManager.GET_SIGNATURES);
