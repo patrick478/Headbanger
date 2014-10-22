@@ -29,11 +29,14 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.google.android.gms.games.internal.constants.TimeSpan;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import mddn.swen.headbanger.R;
+import mddn.swen.headbanger.utilities.DataInterpretter;
 import mddn.swen.headbanger.utilities.HeadsetGattAttributes;
 
 /**
@@ -45,9 +48,13 @@ import mddn.swen.headbanger.utilities.HeadsetGattAttributes;
 public class DeviceControlActivity extends Activity {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
+    /* Bluetooth constants */
     public static final String EXTRAS_DEVICE_NAME = "HMSoft";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
+    private final String LIST_NAME = "NAME";
+    private final String LIST_UUID = "UUID";
 
+    /* Blutooth fields */
     private String mDeviceName;
     private String mDeviceAddress;
     private BluetoothLeService mBluetoothLeService;
@@ -56,10 +63,10 @@ public class DeviceControlActivity extends Activity {
     private boolean mConnected = false;
     private BluetoothGattCharacteristic mNotifyCharacteristic;
 
-    private final String LIST_NAME = "NAME";
-    private final String LIST_UUID = "UUID";
+    /* where the data gets sent for processing */
+    private DataInterpretter interpretter;
 
-    // Code to manage Service lifecycle.
+    /* Code to manage Service lifecycle */
     private final ServiceConnection mServiceConnection = new ServiceConnection() {
 
         @Override
@@ -99,7 +106,7 @@ public class DeviceControlActivity extends Activity {
                 // Show all the supported services and characteristics on the user interface.
                 displayGattServices(mBluetoothLeService.getSupportedGattServices());
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
-                displayData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
+                interpretData(intent.getStringExtra(BluetoothLeService.EXTRA_DATA));
 
             }
         }
@@ -108,7 +115,6 @@ public class DeviceControlActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setContentView(R.layout.gatt_services_characteristics);
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);
@@ -147,9 +153,10 @@ public class DeviceControlActivity extends Activity {
         //TODO: do something if connection status changes (if connection is dropped)
     }
 
-    private void displayData(String data) {
+    private void interpretData(String data) {
         if (data != null) {
             Log.d(TAG, data);
+            interpretter.interpretData(data);
         }
     }
 
