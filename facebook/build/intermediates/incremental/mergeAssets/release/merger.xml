@@ -2,10 +2,10 @@
 <merger version="2" >
 
     <dataSet config="main" >
-        <source path="C:\Users\Bob\workspace\Headbanger\facebook\src\main\assets" />
+        <source path="/Users/devpro/Documents/workspace/Headbanger/facebook/src/main/assets" />
     </dataSet>
     <dataSet config="release" >
-        <source path="C:\Users\Bob\workspace\Headbanger\facebook\src\release\assets" />
+        <source path="/Users/devpro/Documents/workspace/Headbanger/facebook/src/release/assets" />
     </dataSet>
 
 </merger>
