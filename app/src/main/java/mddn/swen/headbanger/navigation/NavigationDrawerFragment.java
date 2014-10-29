@@ -162,25 +162,25 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
             switch (endpoint) {
                 case DASHBOARD:
                     item = new NavigationDrawerItem(
-                            "DASHBOARD",
+                            "Dashboard",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
                             ConnectedDeviceFragment.class);
                     break;
                 case MAP:
                     item = new NavigationDrawerItem(
-                            "MAP",
+                            "Map",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
                             MusicMapFragment.class);
                     break;
                 case CHARTS:
                     item = new NavigationDrawerItem(
-                            "CHARTS",
+                            "Charts",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
                             SongRatingFragment.class);
                     break;
                 case ACCOUNT:
                     item = new NavigationDrawerItem(
-                            "MY ACCOUNT",
+                            "My Account",
                             NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW,
                             User.isLoggedIn() ? UserSettingsFragment.class : LoginFragment.class);
                     break;
