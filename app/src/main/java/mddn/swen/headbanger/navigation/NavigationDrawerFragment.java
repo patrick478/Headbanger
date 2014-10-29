@@ -386,6 +386,9 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                     }
                 }
 
+                /* Update the action bar */
+                getActionBar().setTitle(itemSelected.title);
+
             } catch (Exception e) {
                 Log.e("" + NavigationDrawerFragment.class, e.toString());
             }
