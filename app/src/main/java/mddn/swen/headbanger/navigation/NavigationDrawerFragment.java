@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -105,7 +106,11 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
                 container, false);
         ButterKnife.inject(this, view);
         drawerListView.setOnItemClickListener(this);
-        drawerAdapter = new NavigationDrawerAdapter(getActionBar().getThemedContext(), items);
+        drawerAdapter = new NavigationDrawerAdapter(
+                getActionBar().getThemedContext(),
+                items,
+                Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Thin.ttf")
+        );
         drawerListView.setAdapter(drawerAdapter);
         drawerListView.setItemChecked(currentSelectedPosition, true);
         return view;

@@ -23,8 +23,15 @@ public class NavigationDrawerAdapter extends ArrayAdapter<NavigationDrawerItem> 
     private int ITEM_ROW     = 0;
     private int ITEM_DIVIDER = 1;
 
-    public NavigationDrawerAdapter(Context context, List<NavigationDrawerItem> source) {
+    /* A custom typeface for elements */
+    private Typeface standardFace;
+    private Typeface boldFace;
+
+    public NavigationDrawerAdapter(Context context, List<NavigationDrawerItem> source,
+                                   Typeface normalTypeface, Typeface boldTypeface) {
         super(context, R.layout.list_navigation_row, source);
+        standardFace = normalTypeface;
+        boldFace = boldTypeface;
     }
 
     @Override
@@ -64,9 +71,9 @@ public class NavigationDrawerAdapter extends ArrayAdapter<NavigationDrawerItem> 
         /* Toggle bold if this is the currently selected index */
         if (item.type == NavigationDrawerItem.NavigationDrawerItemType.NAVIGATION_ROW) {
             if (item.isAttached()) {
-                holder.title.setTypeface(null, Typeface.BOLD);
+                holder.title.setTypeface(boldFace);
             } else {
-                holder.title.setTypeface(null, Typeface.NORMAL);
+                holder.title.setTypeface(standardFace);
             }
         }
 
