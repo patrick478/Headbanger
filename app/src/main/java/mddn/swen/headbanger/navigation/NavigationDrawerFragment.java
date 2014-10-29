@@ -109,7 +109,7 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
         drawerAdapter = new NavigationDrawerAdapter(
                 getActionBar().getThemedContext(),
                 items,
-                Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Thin.ttf"),
+                Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Regular.ttf"),
                 Typeface.createFromAsset(getActivity().getAssets(), "font/Roboto-Bold.ttf")
         );
         drawerListView.setAdapter(drawerAdapter);
