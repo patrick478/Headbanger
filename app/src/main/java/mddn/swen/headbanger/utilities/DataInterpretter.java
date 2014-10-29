@@ -1,11 +1,14 @@
 package mddn.swen.headbanger.utilities;
 
-import com.google.android.gms.games.internal.constants.TimeSpan;
+import android.app.Activity;
+import android.util.Log;
 
 /**
  * Created by Pragya on 22/10/14.
  */
 public class DataInterpretter {
+
+    private static final String TAG = DataInterpretter.class.getSimpleName();
 
     //raw data from read
     private String rawData;
@@ -14,7 +17,6 @@ public class DataInterpretter {
     private float pitch;
     private float roll;
     private float yaw;
-    private float yawU;   //FIXME: this doesn't seem to be used anywhere
 
     private GestureState pitchState;
     private GestureState rollState;
@@ -31,12 +33,12 @@ public class DataInterpretter {
     private GestureState prevRollState;
     private float prevRoll;
 
-    private int gestureRange;   //FIXME: this is used, but not sure what it is or what value it should have.
+//    private int gestureRange = 15;   //FIXME: this is used, but not sure what it is or what value it should have.
 
     //Timing details for gestures
 //    private TimerObject rollGestureTimer;  //TODO: figure out timer logic
     private float progress; //time tracking?    //FIXME: this doesn't seem to be used anywhere
-    private int elapsedTime;
+    private int elapsedTime = 2;
 
     //state values for gestures
     private enum GestureState {INCREASING, DECREASING};
@@ -47,14 +49,20 @@ public class DataInterpretter {
     private int nodCount = 0;
 
     //music playback controller
-    private MusicPlayer musicPlayer;
+    private MusicPlayerActivity musicPlayer;
+
+    Activity parentActivity;
 
 
     /**
      * constructor to initialise values
      */
-    public DataInterpretter(){
+    public DataInterpretter(Activity parent){
+        parentActivity = parent;
+        musicPlayer = (MusicPlayerActivity) parent;
     }
+
+
 
     public void interpretData(String data){
         /* The pipeline for processing gesture data */
@@ -71,10 +79,19 @@ public class DataInterpretter {
 
     private void splitRawData(String data){
         //TODO: split data into four segments: pitch, roll, yaw, yawU
-        //pitch = newPitch
-        //roll = newRoll
-        //yaw = newYaw
-        //yawU = newYawU
+
+        String[] dataArray = data.split(",");
+
+        try {
+            pitch = Float.parseFloat(dataArray[0]);
+            roll = Float.parseFloat(dataArray[1]);
+            Log.d(TAG, "pitch is: " + pitch);
+            Log.d(TAG, "roll is: " + roll);
+
+            //yaw = newYaw
+        } catch(NumberFormatException e){
+            e.printStackTrace();
+        }
     }
 
     private void updateBoundaryValues(){
@@ -120,6 +137,7 @@ public class DataInterpretter {
          * and increment the nod count */
         if (pitchState != prevPitchState && musicPlayer.isPlaying()){
             nodCount++;
+            Log.d(TAG, "nod count increased to " + nodCount);
         }
     }
 
@@ -138,13 +156,15 @@ public class DataInterpretter {
             if (rollState != prevRollState && elapsedTime > 1) { //TODO: figure out timer logic
 
                 /* if user tilted or turned their head to the right, skip to the next song */
-                if (musicPlayer.hasNextTrackLoaded() && roll < -(gestureRange)) {
+                if (musicPlayer.hasNextTrackLoaded() && roll < (maxRoll - 5)) {
                    //TODO: rollGestureTimer = new TimerObject; .. I think we need to restart the timer when switching to a new song
+                    Log.d(TAG, "Skip to next track");
                     musicPlayer.skipToNext();
                 }
                 /* if user tilted or turned their head to the left, skip back to the previous song */
-                else if (musicPlayer.hasPreviousTrackLoaded() && roll > gestureRange) {
+                else if (musicPlayer.hasPreviousTrackLoaded() && roll > (minRoll + 5)) {
                     //TODO: rollGestureTimer = TimerObject; .. I think we need to restart the timer when switching to a new song
+                    Log.d(TAG, "Skip to previous track");
                     musicPlayer.skipToPrevious();
                 }
             }

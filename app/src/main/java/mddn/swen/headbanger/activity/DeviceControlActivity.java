@@ -38,6 +38,7 @@ import java.util.List;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.utilities.DataInterpretter;
 import mddn.swen.headbanger.utilities.HeadsetGattAttributes;
+import mddn.swen.headbanger.utilities.MusicPlayerActivity;
 
 /**
  * For a given BLE device, this Activity provides the user interface to connect, display data,
@@ -45,7 +46,7 @@ import mddn.swen.headbanger.utilities.HeadsetGattAttributes;
  * communicates with {@code BluetoothLeService}, which in turn interacts with the
  * Bluetooth LE API.
  */
-public class DeviceControlActivity extends Activity {
+public class DeviceControlActivity extends MusicPlayerActivity {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
     /* Bluetooth constants */
@@ -124,6 +125,8 @@ public class DeviceControlActivity extends Activity {
         getActionBar().setDisplayHomeAsUpEnabled(true);
         Intent gattServiceIntent = new Intent(this, BluetoothLeService.class);
         bindService(gattServiceIntent, mServiceConnection, BIND_AUTO_CREATE);
+
+        interpretter = new DataInterpretter(this);
     }
 
     @Override
@@ -150,12 +153,12 @@ public class DeviceControlActivity extends Activity {
     }
 
     private void updateConnectionState(final int resourceId) {
-        //TODO: do something if connection status changes (if connection is dropped)
+        //TODO: do something if connection status changes (i.e. if connection is dropped)
     }
 
     private void interpretData(String data) {
         if (data != null) {
-            Log.d(TAG, data);
+            Log.d(TAG, "\nreceived data");
             interpretter.interpretData(data);
         }
     }

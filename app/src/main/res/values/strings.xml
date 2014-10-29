@@ -52,5 +52,6 @@
     <string name="user_settings_title">Settings</string>
 
     <string name="title_activity_maps">Map</string>
+    <string name="nod_count">Nods:</string>
 
 </resources>

@@ -33,7 +33,6 @@
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/app_name" >
-
         </activity>
 
         <!-- Facebook login activity -->

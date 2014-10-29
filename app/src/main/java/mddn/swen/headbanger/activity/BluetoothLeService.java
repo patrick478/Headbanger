@@ -133,14 +133,14 @@ public class BluetoothLeService extends Service {
             int format = -1;
             if ((flag & 0x01) != 0) {
                 format = BluetoothGattCharacteristic.FORMAT_UINT16;
-                Log.d(TAG, "Heart rate format UINT16.");
+                Log.d(TAG, "Head tracking format UINT16.");
             } else {
                 format = BluetoothGattCharacteristic.FORMAT_UINT8;
-                Log.d(TAG, "Heart rate format UINT8.");
+                Log.d(TAG, "Head tracking format UINT8.");
             }
-            final int heartRate = characteristic.getIntValue(format, 1);
-            Log.d(TAG, String.format("Received heart rate: %d", heartRate));
-            intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
+            final int headTrackingData = characteristic.getIntValue(format, 1);
+            Log.d(TAG, String.format("Received head tracking data: %d", headTrackingData));
+            intent.putExtra(EXTRA_DATA, String.valueOf(headTrackingData));
         } else {
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();

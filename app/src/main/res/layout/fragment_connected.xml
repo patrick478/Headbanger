@@ -18,31 +18,48 @@
         android:layout_below="@+id/headbanger_connected_icon"
         android:layout_centerHorizontal="true" />
 
-    <Button
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:id="@+id/song_title"
+        android:paddingTop="20dp"
+        android:layout_below="@id/connected_generic_text"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:text="Play/Pause"
-        android:layout_marginBottom="16dp"
-        android:onClick="playPause"/>
-
-    <Button
+        />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:text="Next"
-        android:layout_marginBottom="16dp"
-        android:onClick="nextSong"/>
-
-    <Button
+        android:id="@+id/song_artist"
+        android:paddingTop="20dp"
+        android:layout_below="@id/song_title"
+        android:layout_centerHorizontal="true"
+        />
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentBottom="true"
-        android:text="Previous"
-        android:layout_marginBottom="16dp"
-        android:onClick="prevSong"/>
+        android:id="@+id/song_album"
+        android:paddingTop="20dp"
+        android:layout_below="@id/song_artist"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@+string/nod_count"
+        android:id="@+id/nod_count_header"
+        android:paddingTop="20dp"
+        android:layout_below="@id/song_album"
+        android:layout_centerHorizontal="true"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0"
+        android:id="@+id/nod_count_value"
+        android:layout_below="@id/nod_count_header"
+        android:layout_centerHorizontal="true"
+        />
 
 </RelativeLayout>

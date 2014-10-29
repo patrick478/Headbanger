@@ -26,6 +26,8 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,12 +37,13 @@ import mddn.swen.headbanger.utilities.HeadsetGattAttributes;
 /**
  * Activity for scanning and displaying available Bluetooth LE devices.
  */
-public class DeviceScanActivity extends Activity{
+public class DeviceScanActivity extends Activity implements View.OnClickListener {
     private static final String TAG = DeviceScanActivity.class.getSimpleName();
     private BluetoothAdapter mBluetoothAdapter;
     private boolean mScanning;
     private Handler mHandler;
     private TextView searchStatusDisplay;
+    private Button scanButton;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 30 seconds.
@@ -49,37 +52,32 @@ public class DeviceScanActivity extends Activity{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_device_scan);
+        getActionBar().setTitle(R.string.title_scanning);
+        mHandler = new Handler();
+        searchStatusDisplay = (TextView) findViewById(R.id.device_scan_status);
+        scanButton = (Button) findViewById(R.id.device_scan_button);
+        scanButton.setOnClickListener(this);
 
-        final Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
+        // Use this check to determine whether BLE is supported on the device.  Then you can
+        // selectively disable BLE-related features.
+        if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+            Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+        }
 
-if (false) {
-    setContentView(R.layout.activity_device_scan);
-    getActionBar().setTitle(R.string.title_scanning);
-    mHandler = new Handler();
-    searchStatusDisplay = (TextView) findViewById(R.id.device_scan_status);
+        // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
+        // BluetoothAdapter through BluetoothManager.
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
 
-    // Use this check to determine whether BLE is supported on the device.  Then you can
-    // selectively disable BLE-related features.
-    if (!getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
-        Toast.makeText(this, R.string.ble_not_supported, Toast.LENGTH_SHORT).show();
-        finish();
-    }
-
-    // Initializes a Bluetooth adapter.  For API level 18 and above, get a reference to
-    // BluetoothAdapter through BluetoothManager.
-    final BluetoothManager bluetoothManager =
-            (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
-    mBluetoothAdapter = bluetoothManager.getAdapter();
-
-    // Checks if Bluetooth is supported on the device.
-    if (mBluetoothAdapter == null) {
-        Toast.makeText(this, R.string.bluetooth_not_supported, Toast.LENGTH_SHORT).show();
-        finish();
-        return;
-    }
-}
+        // Checks if Bluetooth is supported on the device.
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, R.string.bluetooth_not_supported, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
     }
 
 //    @Override
@@ -167,10 +165,13 @@ if (false) {
                     mScanning = false;
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
 //                    invalidateOptionsMenu();
+                    scanButton.setEnabled(true);
+                    searchStatusDisplay.setText("Could not find headset!\nPlease check whether Bluetooth is turned on and try again.");
                 }
             }, SCAN_PERIOD);
 
             mScanning = true;
+            scanButton.setEnabled(false);
             mBluetoothAdapter.startLeScan(mLeScanCallback);
         } else {
             mScanning = false;
@@ -195,24 +196,30 @@ if (false) {
     private BluetoothAdapter.LeScanCallback mLeScanCallback =
             new BluetoothAdapter.LeScanCallback() {
 
-        @Override
-        public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
-            if (device != null){
-                Log.d(TAG, "Found device - check whether it is the one we want");
-                if (device.getName()==null){
-                    Log.d(TAG, "name is null -__-");
-                }
-                else{
-                    if (device.getName().equals(HeadsetGattAttributes.DEVICE_NAME)){
-                        Log.d(TAG, "Found device " + device.getName() + "! Will now connect to it.");
-                        connectDevice(device);
-                    }
-                    else {
-                        Log.d(TAG, "Found device " + device.getName() + " - not the one we're after :(");
-                    }
-                }
+                @Override
+                public void onLeScan(final BluetoothDevice device, int rssi, byte[] scanRecord) {
+                    if (device != null){
+                        Log.d(TAG, "Found device - check whether it is the one we want");
+                        if (device.getName()==null){
+                            Log.d(TAG, "name is null -__-");
+                        }
+                        else{
+                            if (device.getName().equals(HeadsetGattAttributes.DEVICE_NAME)){
+                                Log.d(TAG, "Found device " + device.getName() + "! Will now connect to it.");
+                                connectDevice(device);
+                            }
+                            else {
+                                Log.d(TAG, "Found device " + device.getName() + " - not the one we're after :(");
+                            }
+                        }
 
-            }
-        }
-    };
+                    }
+                }
+            };
+
+    @Override
+    public void onClick(View view) {
+        searchStatusDisplay.setText("Searching for headset...");
+        scanLeDevice(true);
+    }
 }
