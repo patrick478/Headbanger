@@ -1,6 +1,8 @@
 package mddn.swen.headbanger.fragment;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -43,10 +47,28 @@ public class SongRatingFragment extends Fragment {
         songRatingAdapter = new SongRatingAdapter(getActivity());
         songRatingList.setAdapter(songRatingAdapter);
         songRatingList.setOnItemClickListener(songRatingAdapter);
-        List<Object> newList = new ArrayList<Object>(); //TODO obviously silly
-        newList.add(new Object());
-        songRatingAdapter.setRows(newList);
+        songRatingAdapter.setRows(getMeSomeFakeData());
     }
 
-
+    /**
+     * TODO if we can load this from the server that is preferable
+     *
+     * @return A list of fake song item data
+     */
+    private List<SongRatingAdapter.SongListItem> getMeSomeFakeData() {
+        Map<String, Bitmap> fakeMap = new HashMap<String, Bitmap>();
+        fakeMap.put("Shake It Off", BitmapFactory.decodeResource(getResources(), R.drawable.swift));
+        fakeMap.put("All About That Bass", BitmapFactory.decodeResource(getResources(), R.drawable.trainor));
+        fakeMap.put("Only Love Can Hurt", BitmapFactory.decodeResource(getResources(), R.drawable.faith));
+        fakeMap.put("Thinking Out Loud", BitmapFactory.decodeResource(getResources(), R.drawable.sheeran));
+        fakeMap.put("I'm Not the Only One", BitmapFactory.decodeResource(getResources(), R.drawable.smith));
+        List<SongRatingAdapter.SongListItem> items = new ArrayList<SongRatingAdapter.SongListItem>();
+        for (String songTitle : fakeMap.keySet()) {
+            SongRatingAdapter.SongListItem item = new SongRatingAdapter.SongListItem();
+            item.songTitle = songTitle;
+            item.albumArt = fakeMap.get(songTitle);
+            items.add(item);
+        }
+        return items;
+    }
 }

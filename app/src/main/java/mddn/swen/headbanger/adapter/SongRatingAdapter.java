@@ -2,6 +2,7 @@ package mddn.swen.headbanger.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +24,13 @@ import mddn.swen.headbanger.R;
  *
  * Created by John on 22/10/2014.
  */
-public class SongRatingAdapter extends ArrayAdapter<Object> implements AdapterView.OnItemClickListener {
+public class SongRatingAdapter extends ArrayAdapter<SongRatingAdapter.SongListItem>
+        implements AdapterView.OnItemClickListener {
 
     /**
      * Stores a list of rows
      */
-    private List<Object> rowList; //TODO shouldn't be Object
+    private List<SongListItem> rowList;
 
     /**
      * Preferred constructor
@@ -37,7 +39,7 @@ public class SongRatingAdapter extends ArrayAdapter<Object> implements AdapterVi
      */
     public SongRatingAdapter(Context context) {
         super(context, R.layout.list_ratings_row);
-        rowList = new ArrayList<Object>();
+        rowList = new ArrayList<SongListItem>();
     }
 
     /**
@@ -45,7 +47,7 @@ public class SongRatingAdapter extends ArrayAdapter<Object> implements AdapterVi
      *
      * @param newList A list of song ratings to use
      */
-    public void setRows(List<Object> newList) {
+    public void setRows(List<SongListItem> newList) {
         rowList = newList;
         notifyDataSetChanged();
     }
@@ -64,14 +66,15 @@ public class SongRatingAdapter extends ArrayAdapter<Object> implements AdapterVi
             holder = new ViewHolder(convertView);
             convertView.setTag(holder);
         }
-//        holder.albumArt.setImageBitmap(); TODO
-        holder.songTitle.setText("A Song Title"); //TODO
+        holder.listPosition.setText((position + 1) + ".");
+        holder.albumArt.setImageBitmap(rowList.get(position).albumArt);
+        holder.songTitle.setText(rowList.get(position).songTitle);
         return convertView;
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String songTitle = "A song title"; //TODO fetch from list
+        String songTitle = rowList.get(position).songTitle;
         Uri uri = Uri.parse("http://www.youtube.com/results?search_query=" + songTitle);
         Intent intent = new Intent(Intent.ACTION_VIEW, uri);
         getContext().startActivity(intent);
@@ -92,6 +95,9 @@ public class SongRatingAdapter extends ArrayAdapter<Object> implements AdapterVi
      */
     public static class ViewHolder {
 
+        @InjectView(R.id.list_position)
+        TextView listPosition;
+
         @InjectView(R.id.song_title)
         TextView songTitle;
 
@@ -101,5 +107,13 @@ public class SongRatingAdapter extends ArrayAdapter<Object> implements AdapterVi
         public ViewHolder(View rowView) {
             ButterKnife.inject(this, rowView);
         }
+    }
+
+    /**
+     * A simple class representing a list item
+     */
+    public static class SongListItem {
+        public String songTitle;
+        public Bitmap albumArt;
     }
 }
