@@ -145,8 +145,10 @@ public class User {
         new Thread(new Runnable() {
             @Override
             public void run() {
+                System.out.println("STARTED");
                 try {
                     while (User.profilePicture == null) {
+                        System.out.println("RUNNING");
                         Thread.sleep(100);
                     }
                     if (listener != null) {

@@ -1,6 +1,7 @@
 package mddn.swen.headbanger.fragment;
 
 import android.app.Fragment;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import mddn.swen.headbanger.R;
@@ -28,8 +30,7 @@ public class MusicMapFragment extends Fragment {
 
     /* The interactive map - null if service unavailable */
     private GoogleMap map;
-    private MapFragment smf;
-    private MarkerOptions marker;
+    private MapFragment mapFragment;
 
     /* A reference of the GPS tracking service */
     GPSTracker gpsTracker;
@@ -38,11 +39,11 @@ public class MusicMapFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_music_map, container, false);
 
-        smf = ((MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map));
-        smf.onCreate(savedInstanceState);
-        smf.onResume();
+        mapFragment = ((MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map));
+        mapFragment.onCreate(savedInstanceState);
+        mapFragment.onResume();
 
-        map = smf.getMap();
+        map = mapFragment.getMap();
 
         gpsTracker = new GPSTracker(this.getActivity());
         if(gpsTracker.canGetLocation()){
@@ -59,25 +60,34 @@ public class MusicMapFragment extends Fragment {
     @Override
     public void onPause(){
         super.onPause();
-        smf.onPause();
+        mapFragment.onPause();
     }
 
     @Override
     public void onResume(){
         super.onResume();
-        smf.onResume();
+        mapFragment.onResume();
 
     }
     @Override
     public void onDestroy(){
         super.onDestroy();
-        smf.onDestroy();
+        if (map != null) {
+            getActivity()
+                    .getFragmentManager()
+                    .beginTransaction()
+                    .remove(getActivity().getFragmentManager().findFragmentById(R.id.map))
+                    .commit();
+        }
+        map = null;
+        mapFragment = null;
+        gpsTracker = null;
     }
 
     @Override
     public void onLowMemory(){
         super.onLowMemory();
-        smf.onLowMemory();
+        mapFragment.onLowMemory();
     }
 
     /**
@@ -90,32 +100,33 @@ public class MusicMapFragment extends Fragment {
             cLatLng = new LatLng(gpsTracker.getLatitude(), gpsTracker.getLongitude());
             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(cLatLng, 15);
             map.animateCamera(cameraUpdate);
-            marker = new MarkerOptions().position(cLatLng);
-        /* Check if the user is available */
+            final Marker tempMarker = map.addMarker(new MarkerOptions().position(cLatLng));
+
+            /* Check if the user is available */
             if (User.isLoggedIn()) {
-            /* Assign their actual name */
-                marker.title(User.getGraphUser().getName());
-            /* Attempt to load in their profile picture */
-                marker.icon(BitmapDescriptorFactory.fromBitmap(User.profilePicture));
-//                User.getProfilePicture(new User.ProfilePicListener() {
-//                    @Override
-//                    public void onPicLoaded(Bitmap profilePic) {
-//                        marker.icon(BitmapDescriptorFactory.fromBitmap(profilePic));
-//                    }
-//                });
+
+                /* Assign their actual name */
+                tempMarker.setTitle(User.getGraphUser().getName());
+
+                /* Attempt to load in their profile picture */
+                User.getProfilePicture(new User.ProfilePicListener() {
+                    @Override
+                    public void onPicLoaded(Bitmap profilePic) {
+                        tempMarker.setIcon(BitmapDescriptorFactory.fromBitmap(profilePic));
+                    }
+                });
             }
-            map.addMarker(marker);
         }
     }
 
     /**
-     * Helper method to return a simple empty map marker with a default title:
+     * Helper method to return a simple empty map userMarker with a default title:
      * {@link mddn.swen.headbanger.R.string#map_marker_placeholder_title}
      *
      * And a default image:
      * {@link mddn.swen.headbanger.R.drawable#nowplayingimage}
      *
-     * @return An empty default map marker.
+     * @return An empty default map userMarker.
      */
     private MarkerOptions emptyMarker() {
         return new MarkerOptions()
@@ -130,11 +141,11 @@ public class MusicMapFragment extends Fragment {
      * @return
 
     private MarkerOptions userMarkers(User user){
-        return new MarkerOptions()
-                .title(user.getGraphUser().getName())
-                .icon(BitmapDescriptorFactory.fromBitmap(user.profilePicture))
-                .anchor(0.5f, 0.5f)
-                .position(user.position);
+    return new MarkerOptions()
+    .title(user.getGraphUser().getName())
+    .icon(BitmapDescriptorFactory.fromBitmap(user.profilePicture))
+    .anchor(0.5f, 0.5f)
+    .position(user.position);
     }
-    */
+     */
 }
