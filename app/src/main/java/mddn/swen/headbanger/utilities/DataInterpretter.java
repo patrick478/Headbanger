@@ -1,6 +1,7 @@
 package mddn.swen.headbanger.utilities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.util.Log;
 
 /**
@@ -72,6 +73,8 @@ public class DataInterpretter {
         updateBoundaryValues();
 
         checkForGestures();
+
+        broadcastData();
 
         /* save current gesture data to compare with data from the next read */
         persistCurrentData();
@@ -179,6 +182,18 @@ public class DataInterpretter {
         else if (musicPlayer.isPaused() && pitch < 10){
             musicPlayer.playMusic();
         }
+    }
+
+    /**
+     * The interpreter needs to broadcast the data everytime it is updated
+     * The connected device fragment then recieves and updates icon and textfields
+     *
+     */
+    private void broadcastData() {
+        Intent i = new Intent("mddn.swen.headbanger.action.DATA_UPDATED");
+        i.putExtra("pitch",pitch);
+        i.putExtra("roll",roll);
+        musicPlayer.sendBroadcast(i);
     }
 
     private void persistCurrentData() {
