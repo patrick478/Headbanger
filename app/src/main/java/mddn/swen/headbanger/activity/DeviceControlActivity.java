@@ -158,7 +158,6 @@ public class DeviceControlActivity extends MusicPlayerActivity {
 
     private void interpretData(String data) {
         if (data != null) {
-            Log.d(TAG, "\nreceived data");
             interpretter.interpretData(data);
         }
     }

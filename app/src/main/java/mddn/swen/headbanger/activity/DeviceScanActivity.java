@@ -166,7 +166,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
                     mBluetoothAdapter.stopLeScan(mLeScanCallback);
 //                    invalidateOptionsMenu();
                     scanButton.setEnabled(true);
-                    searchStatusDisplay.setText("Could not find headset!\nPlease check whether Bluetooth is turned on and try again.");
+                    searchStatusDisplay.setText(getString(R.string.headset_not_found));
                 }
             }, SCAN_PERIOD);
 

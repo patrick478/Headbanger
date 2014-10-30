@@ -3,63 +3,61 @@
     android:layout_height="match_parent">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/headbanger_connected_icon"
-        android:src="@drawable/headphone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_centerHorizontal="true" />
+        android:src="@drawable/headphone" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@+string/connected_successful_string"
         android:id="@+id/connected_generic_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/headbanger_connected_icon"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@+string/connected_successful_string" />
 
     <TextView
+        android:id="@+id/song_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/song_title"
-        android:paddingTop="20dp"
         android:layout_below="@id/connected_generic_text"
         android:layout_centerHorizontal="true"
-        />
+        android:paddingTop="20dp" />
+
     <TextView
+        android:id="@+id/song_artist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/song_artist"
-        android:paddingTop="20dp"
         android:layout_below="@id/song_title"
         android:layout_centerHorizontal="true"
-        />
+        android:paddingTop="20dp" />
+
     <TextView
+        android:id="@+id/song_album"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/song_album"
-        android:paddingTop="20dp"
         android:layout_below="@id/song_artist"
         android:layout_centerHorizontal="true"
-        />
+        android:paddingTop="20dp" />
 
     <TextView
+        android:id="@+id/nod_count_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@+string/nod_count"
-        android:id="@+id/nod_count_header"
-        android:paddingTop="20dp"
         android:layout_below="@id/song_album"
         android:layout_centerHorizontal="true"
-        />
+        android:paddingTop="20dp"
+        android:text="@+string/nod_count" />
 
     <TextView
+        android:id="@+id/nod_count_value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0"
-        android:id="@+id/nod_count_value"
         android:layout_below="@id/nod_count_header"
         android:layout_centerHorizontal="true"
-        />
+        android:text="0" />
 
 </RelativeLayout>
