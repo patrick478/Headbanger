@@ -32,6 +32,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,13 +50,11 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     private boolean mScanning;
     private Handler mHandler;
     private TextView searchStatusDisplay;
-    private Button scanButton;
+    private ImageButton scanButton;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 30 seconds.
     private static final long SCAN_PERIOD = 30000;
-
-    ImageView image;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,7 +63,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         getActionBar().setTitle(R.string.title_scanning);
         mHandler = new Handler();
         searchStatusDisplay = (TextView) findViewById(R.id.device_scan_status);
-        scanButton = (Button) findViewById(R.id.device_scan_button);
+        scanButton = (ImageButton) findViewById(R.id.headbanger_scanning_icon);
         scanButton.setOnClickListener(this);
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
@@ -153,6 +152,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     protected void onPause() {
         super.onPause();
         scanLeDevice(false);
+        scanButton.clearAnimation();
     }
 
 //    @Override
@@ -173,9 +173,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         /**
          * Small animation for when searching for headphones
          */
-//        Animation bounce = AnimationUtils.loadAnimation(getApplicationContext(),
-//                R.anim.scanning_icon_anim);
-//        image.startAnimation(bounce);
+        Animation bounce = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.scanning_icon_anim);
+        scanButton.startAnimation(bounce);
 
         if (enable) {
             // Stops scanning after a pre-defined scan period.
@@ -187,7 +187,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 //                    invalidateOptionsMenu();
                     scanButton.setEnabled(true);
                     searchStatusDisplay.setText(getString(R.string.headset_not_found));
-//                    image.clearAnimation();
+                    scanButton.clearAnimation();
                 }
             }, SCAN_PERIOD);
 

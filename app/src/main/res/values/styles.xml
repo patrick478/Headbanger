@@ -1,8 +1,13 @@
 <resources>
 
     <!-- Base mddn.swen.headbanger.application theme. -->
-    <style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">
+    <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
+        <item name="android:actionBarStyle">@style/myActionBar</item>
+    </style>
+
+    <style name="myActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">#00ffff</item>
     </style>
 
 </resources>
