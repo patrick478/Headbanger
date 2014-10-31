@@ -26,9 +26,8 @@ public class DataInterpretter {
     //minimum and maximum boundary values
     private float maxPitch = 0;
     private float minPitch = 0;
-    private float maxRoll = -50;
-    private float minRoll = 50;
-    private float middleRoll = 0;
+    private float maxRoll = 30;
+    private float minRoll = -30;
 
     //previous read's values to compare with current read
     private GestureState prevPitchState;
@@ -36,7 +35,7 @@ public class DataInterpretter {
     private GestureState prevRollState;
     private float prevRoll;
 
-//    private int gestureRange = 15;   //FIXME: this is used, but not sure what it is or what value it should have.
+    private int gestureRange = 10;   //FIXME: this is used, but not sure what value it should have.
 
     //Timing details for gestures
 //    private TimerObject rollGestureTimer;  //TODO: figure out timer logic
@@ -157,16 +156,16 @@ public class DataInterpretter {
             if (rollState != prevRollState && elapsedTime > 1) { //TODO: figure out timer logic
 
                 /* if user tilted or turned their head to the right, skip to the next song */
-                if (musicPlayer.hasNextTrackLoaded() && roll < (middleRoll + 10)) {
+                if (musicPlayer.hasNextTrackLoaded() && roll < (0 - gestureRange)) {
                    //TODO: rollGestureTimer = new TimerObject; .. I think we need to restart the timer when switching to a new song
                     Log.d(TAG, "Skip to next track");
-//                    musicPlayer.skipToNext();
+                    musicPlayer.skipToNext();
                 }
                 /* if user tilted or turned their head to the left, skip back to the previous song */
-                else if (musicPlayer.hasPreviousTrackLoaded() && roll > (middleRoll - 10)) {
+                else if (musicPlayer.hasPreviousTrackLoaded() && roll > (gestureRange)) {
                     //TODO: rollGestureTimer = TimerObject; .. I think we need to restart the timer when switching to a new song
                     Log.d(TAG, "Skip to previous track");
-//                    musicPlayer.skipToPrevious();
+                    musicPlayer.skipToPrevious();
                 }
             }
 
@@ -200,9 +199,5 @@ public class DataInterpretter {
         prevRoll = roll;
         prevRollState = rollState;
     }
-
-//    public void resetNodCount(){
-//        nodCount = 0;
-//    }
 
 }

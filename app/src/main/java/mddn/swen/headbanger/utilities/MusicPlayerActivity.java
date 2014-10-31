@@ -44,6 +44,11 @@ public class MusicPlayerActivity extends Activity{
     public static final String SERVICECMD = "com.android.music.musicservicecommand";
     public static final String CMDNAME = "command";
     public static final String CMDSTOP = "stop";
+    public static final String META_CHANGED = "com.android.music.metachanged";
+    public static final String PLAYBACK_COMPLETE = "com.android.music.playbackcomplete";
+    public static final String QUEUE_CHANGED = "com.android.music.queuechanged";
+
+    public static final String NOD_CHANGED = "nodchanged";
 
     /* Music information */
     public String track;
@@ -57,10 +62,10 @@ public class MusicPlayerActivity extends Activity{
 
         /* set up audio playback control */
         IntentFilter iF = new IntentFilter();
-        iF.addAction("com.android.music.metachanged");
+        iF.addAction(META_CHANGED);
         iF.addAction("com.android.music.playstatechanged");
-        iF.addAction("com.android.music.playbackcomplete");
-        iF.addAction("com.android.music.queuechanged");
+        iF.addAction(PLAYBACK_COMPLETE);
+        iF.addAction(QUEUE_CHANGED);
 
         registerReceiver(mReceiver, iF);
 
@@ -69,6 +74,7 @@ public class MusicPlayerActivity extends Activity{
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+
             /* Interpret audio control action */
             String action = intent.getAction();
             String cmd = intent.getStringExtra("command");
@@ -79,7 +85,12 @@ public class MusicPlayerActivity extends Activity{
             playing = intent.getBooleanExtra("playing",false);
             String nowPlayingInfo = album +"\n"+ track +"\n"+ artist + "\n" + playing;
             Log.d(TAG, nowPlayingInfo);
-//            resetNodCount();
+
+            /* If the current track has finished, reset the nod count for the next song */
+            if (action.equals(PLAYBACK_COMPLETE)){
+                resetNodCount();
+            }
+
         }
     };
 
@@ -122,14 +133,22 @@ public class MusicPlayerActivity extends Activity{
 
     public void addNod(){
         nodCount++;
-//        nodCountDisplay.setText("" + nodCount);
         Log.d(TAG, "nod count increased to " + nodCount);
+
+        /* Broadcast to alert UI of update */
+        Intent i = new Intent(NOD_CHANGED);
+        i.putExtra(NOD_CHANGED, nodCount);
+        MusicPlayerActivity.this.sendBroadcast(i);
     }
 
     public void resetNodCount(){
         nodCount = 0;
-//        nodCountDisplay.setText(String.format("%d", nodCount));
         Log.d(TAG, "nod count reset to 0");
+
+        /* Broadcast to alert UI of update */
+        Intent i = new Intent(NOD_CHANGED);
+        i.putExtra(NOD_CHANGED, nodCount);
+        MusicPlayerActivity.this.sendBroadcast(i);
     }
 
     public boolean isPaused() {

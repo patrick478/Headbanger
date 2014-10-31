@@ -38,7 +38,6 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
 
     private static final String TAG = ConnectedDeviceFragment.class.getSimpleName();
 
-
     private Float pitch;
     private Float roll;
 
@@ -48,6 +47,10 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
     private TextView songAlbum;
     private TextView nodCountDisplay;
     private ImageView playStatusDisplay;
+
+    private String artist;
+    private String track;
+    private String album;
 
 
     @Override
@@ -68,6 +71,8 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
         IntentFilter iF = new IntentFilter();
         iF.addAction(DataInterpretter.DATA_UPDATED);
         iF.addAction(MusicPlayerActivity.SERVICECMD);
+        iF.addAction(MusicPlayerActivity.META_CHANGED);
+        iF.addAction(MusicPlayerActivity.NOD_CHANGED);
 
         this.getActivity().registerReceiver(mReceiver, iF);
 
@@ -104,6 +109,21 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
                 else if (command.equals(MusicPlayerActivity.CMDPAUSE)) {
                     setPauseIcon();
                 }
+                else if (command.equals(MusicPlayerActivity.CMDNEXT) || command.equals(MusicPlayerActivity.CMDPREVIOUS)){
+                    nodCountDisplay.setText(String.format("%d", 0));
+                }
+            }
+            else if (action.equals(MusicPlayerActivity.META_CHANGED)){
+                artist = intent.getStringExtra("artist");
+                album = intent.getStringExtra("album");
+                track = intent.getStringExtra("track");
+
+                songName.setText(track);
+                songArtist.setText(artist);
+                songAlbum.setText(album);
+            }else if (action.equals(MusicPlayerActivity.NOD_CHANGED)){
+                int nodCount = intent.getIntExtra(MusicPlayerActivity.NOD_CHANGED, 0);
+                nodCountDisplay.setText(String.format("%d", nodCount));
             }
         }
     };
@@ -116,6 +136,8 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
     private void setPlayIcon(){
         playStatusDisplay.setBackgroundResource(R.drawable.ic_play);
     }
+
+
 
 
     @Override

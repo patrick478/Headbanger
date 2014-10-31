@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/song_title"
         android:layout_centerHorizontal="true"
-        android:paddingTop="20dp" />
+        android:paddingTop="15dp" />
 
     <TextView
         android:id="@+id/song_album"
@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/song_artist"
         android:layout_centerHorizontal="true"
-        android:paddingTop="20dp" />
+        android:paddingTop="15dp" />
 
     <ImageView
         android:id="@+id/play_status_image"
@@ -57,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/song_album"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:background="@drawable/ic_pause"
         />
 
