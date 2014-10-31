@@ -10,6 +10,14 @@
         android:layout_marginTop="@dimen/activity_vertical_margin"
         android:src="@drawable/headphone" />
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/small31"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:alpha="0"/>
+
     <TextView
         android:id="@+id/connected_generic_text"
         android:layout_width="match_parent"

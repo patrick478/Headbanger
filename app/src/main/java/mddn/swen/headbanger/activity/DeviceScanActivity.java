@@ -23,14 +23,20 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.ScaleAnimation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import butterknife.InjectView;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.utilities.HeadsetGattAttributes;
 
@@ -48,6 +54,8 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 30 seconds.
     private static final long SCAN_PERIOD = 30000;
+
+    ImageView image;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,6 +86,11 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             finish();
             return;
         }
+
+        image = (ImageView)findViewById(R.id.headbanger_scanning_icon);
+        image.setScaleX(1f);
+        image.setScaleY(1f);
+
     }
 
 //    @Override
@@ -157,6 +170,13 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 //    }
 
     private void scanLeDevice(final boolean enable) {
+        /**
+         * Small animation for when searching for headphones
+         */
+        Animation bounce = AnimationUtils.loadAnimation(getApplicationContext(),
+                R.anim.scanning_icon_anim);
+        image.startAnimation(bounce);
+
         if (enable) {
             // Stops scanning after a pre-defined scan period.
             mHandler.postDelayed(new Runnable() {
@@ -167,6 +187,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 //                    invalidateOptionsMenu();
                     scanButton.setEnabled(true);
                     searchStatusDisplay.setText(getString(R.string.headset_not_found));
+                    image.clearAnimation();
                 }
             }, SCAN_PERIOD);
 
