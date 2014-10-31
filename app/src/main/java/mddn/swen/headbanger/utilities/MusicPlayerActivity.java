@@ -5,25 +5,35 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.activity.BluetoothLeService;
+import mddn.swen.headbanger.navigation.NavigationDrawerFragment;
 
 /**
  * Created by Pragya on 22/10/14.
  */
 public class MusicPlayerActivity extends Activity{
 
+    private static final String TAG = MusicPlayerActivity.class.getSimpleName();
+
+    private Handler mHandler;
+
     /* music player states for gesture interpretation */
 //    private boolean playing;
     private boolean nextLoaded = true;
     private boolean previousLoaded = true;
-
+    private int nodCount = 0;
 
     /* Music control fields */
     public static final String CMDTOGGLEPAUSE = "togglepause";
@@ -41,15 +51,10 @@ public class MusicPlayerActivity extends Activity{
     public String artist;
     public Boolean playing = true;
 
-    private TextView songName;
-    private TextView songArtist;
-    private TextView songAlbum;
-    private TextView nodCount;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         /* set up audio playback control */
         IntentFilter iF = new IntentFilter();
         iF.addAction("com.android.music.metachanged");
@@ -59,9 +64,6 @@ public class MusicPlayerActivity extends Activity{
 
         registerReceiver(mReceiver, iF);
 
-        songName = (TextView) findViewById(R.id.song_title);
-        songArtist = (TextView) findViewById(R.id.song_artist);
-        songAlbum = (TextView) findViewById(R.id.song_album);
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -76,29 +78,10 @@ public class MusicPlayerActivity extends Activity{
             track = intent.getStringExtra("track");
             playing = intent.getBooleanExtra("playing",false);
             String nowPlayingInfo = album +"\n"+ track +"\n"+ artist + "\n" + playing;
-            Log.v("tag", artist + ":" + album + ":" + track);
-            
-            Toast.makeText(MusicPlayerActivity.this, nowPlayingInfo, Toast.LENGTH_SHORT).show();
+            Log.d(TAG, nowPlayingInfo);
+//            resetNodCount();
         }
     };
-
-    public void playPause(View oView){
-        Intent i = new Intent(SERVICECMD);
-        i.putExtra(CMDNAME, CMDTOGGLEPAUSE);
-        MusicPlayerActivity.this.sendBroadcast(i);
-        Log.i(CMDNAME, CMDTOGGLEPAUSE);
-    }
-
-    public void prevSong(View oView){
-        skipToPrevious();
-    }
-
-    public void nextSong(View oView){
-        skipToNext();
-    }
-
-
-
 
     //TODO: get notifications of audio track changes so that the nod count can be reset for each track
 
@@ -135,6 +118,18 @@ public class MusicPlayerActivity extends Activity{
             Log.i(CMDNAME, CMDPLAY);
             playing = true;
         }
+    }
+
+    public void addNod(){
+        nodCount++;
+//        nodCountDisplay.setText("" + nodCount);
+        Log.d(TAG, "nod count increased to " + nodCount);
+    }
+
+    public void resetNodCount(){
+        nodCount = 0;
+//        nodCountDisplay.setText(String.format("%d", nodCount));
+        Log.d(TAG, "nod count reset to 0");
     }
 
     public boolean isPaused() {

@@ -87,9 +87,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
             return;
         }
 
-        image = (ImageView)findViewById(R.id.headbanger_scanning_icon);
-        image.setScaleX(1f);
-        image.setScaleY(1f);
+//        image = (ImageView)findViewById(R.id.headbanger_scanning_icon);
+//        image.setScaleX(1f);
+//        image.setScaleY(1f);
 
     }
 
@@ -173,9 +173,9 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         /**
          * Small animation for when searching for headphones
          */
-        Animation bounce = AnimationUtils.loadAnimation(getApplicationContext(),
-                R.anim.scanning_icon_anim);
-        image.startAnimation(bounce);
+//        Animation bounce = AnimationUtils.loadAnimation(getApplicationContext(),
+//                R.anim.scanning_icon_anim);
+//        image.startAnimation(bounce);
 
         if (enable) {
             // Stops scanning after a pre-defined scan period.
@@ -187,7 +187,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 //                    invalidateOptionsMenu();
                     scanButton.setEnabled(true);
                     searchStatusDisplay.setText(getString(R.string.headset_not_found));
-                    image.clearAnimation();
+//                    image.clearAnimation();
                 }
             }, SCAN_PERIOD);
 

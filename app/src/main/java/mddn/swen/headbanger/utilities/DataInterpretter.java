@@ -10,6 +10,7 @@ import android.util.Log;
 public class DataInterpretter {
 
     private static final String TAG = DataInterpretter.class.getSimpleName();
+    public static final String DATA_UPDATED = "mddn.swen.headbanger.action.DATA_UPDATED";
 
     //raw data from read
     private String rawData;
@@ -25,8 +26,9 @@ public class DataInterpretter {
     //minimum and maximum boundary values
     private float maxPitch = 0;
     private float minPitch = 0;
-    private float maxRoll;
-    private float minRoll;
+    private float maxRoll = -50;
+    private float minRoll = 50;
+    private float middleRoll = 0;
 
     //previous read's values to compare with current read
     private GestureState prevPitchState;
@@ -45,9 +47,6 @@ public class DataInterpretter {
     private enum GestureState {INCREASING, DECREASING};
 
     private String nodBPM;  //FIXME: not sure what this is for
-
-    //rating data
-    private int nodCount = 0;
 
     //music playback controller
     private MusicPlayerActivity musicPlayer;
@@ -139,8 +138,7 @@ public class DataInterpretter {
         /* If a nod has happened, make sure the music is on (because we know that the headphone are on the user's head),
          * and increment the nod count */
         if (pitchState != prevPitchState && musicPlayer.isPlaying()){
-            nodCount++;
-            Log.d(TAG, "nod count increased to " + nodCount);
+            musicPlayer.addNod();
         }
     }
 
@@ -159,16 +157,16 @@ public class DataInterpretter {
             if (rollState != prevRollState && elapsedTime > 1) { //TODO: figure out timer logic
 
                 /* if user tilted or turned their head to the right, skip to the next song */
-                if (musicPlayer.hasNextTrackLoaded() && roll < (maxRoll - 5)) {
+                if (musicPlayer.hasNextTrackLoaded() && roll < (middleRoll + 10)) {
                    //TODO: rollGestureTimer = new TimerObject; .. I think we need to restart the timer when switching to a new song
                     Log.d(TAG, "Skip to next track");
-                    musicPlayer.skipToNext();
+//                    musicPlayer.skipToNext();
                 }
                 /* if user tilted or turned their head to the left, skip back to the previous song */
-                else if (musicPlayer.hasPreviousTrackLoaded() && roll > (minRoll + 5)) {
+                else if (musicPlayer.hasPreviousTrackLoaded() && roll > (middleRoll - 10)) {
                     //TODO: rollGestureTimer = TimerObject; .. I think we need to restart the timer when switching to a new song
                     Log.d(TAG, "Skip to previous track");
-                    musicPlayer.skipToPrevious();
+//                    musicPlayer.skipToPrevious();
                 }
             }
 
@@ -190,7 +188,7 @@ public class DataInterpretter {
      *
      */
     private void broadcastData() {
-        Intent i = new Intent("mddn.swen.headbanger.action.DATA_UPDATED");
+        Intent i = new Intent(DATA_UPDATED);
         i.putExtra("pitch",pitch);
         i.putExtra("roll",roll);
         musicPlayer.sendBroadcast(i);
@@ -203,8 +201,8 @@ public class DataInterpretter {
         prevRollState = rollState;
     }
 
-    public void resetNodCount(){
-        nodCount = 0;
-    }
+//    public void resetNodCount(){
+//        nodCount = 0;
+//    }
 
 }

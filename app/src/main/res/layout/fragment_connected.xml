@@ -51,11 +51,20 @@
         android:layout_centerHorizontal="true"
         android:paddingTop="20dp" />
 
+    <ImageView
+        android:id="@+id/play_status_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/song_album"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/ic_pause"
+        />
+
     <TextView
         android:id="@+id/nod_count_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/song_album"
+        android:layout_below="@id/play_status_image"
         android:layout_centerHorizontal="true"
         android:paddingTop="20dp"
         android:text="@+string/nod_count" />

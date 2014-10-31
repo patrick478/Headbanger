@@ -11,6 +11,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.ButterKnife;
@@ -25,18 +29,25 @@ import butterknife.InjectView;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.activity.DeviceControlActivity;
 import mddn.swen.headbanger.utilities.DataInterpretter;
+import mddn.swen.headbanger.utilities.MusicPlayerActivity;
 
 /**
  * Is displayed when the application has successfully connected with a device
  */
 public class ConnectedDeviceFragment extends Fragment implements SensorEventListener{
 
-    /* The headphones icon */
-    @InjectView(R.id.headbanger_connected_icon)
-    ImageView connectedIcon;
+    private static final String TAG = ConnectedDeviceFragment.class.getSimpleName();
+
 
     private Float pitch;
     private Float roll;
+
+    private ImageView connectedIcon;
+    private TextView songName;
+    private TextView songArtist;
+    private TextView songAlbum;
+    private TextView nodCountDisplay;
+    private ImageView playStatusDisplay;
 
 
     @Override
@@ -45,7 +56,19 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
         ButterKnife.inject(this, view);
         Context context = this.getActivity();
 
-        IntentFilter iF = new IntentFilter("mddn.swen.headbanger.action.DATA_UPDATED");
+        connectedIcon = (ImageView) view.findViewById(R.id.headbanger_connected_icon);
+        songName = (TextView) view.findViewById(R.id.song_title);
+        songArtist = (TextView) view.findViewById(R.id.song_artist);
+        songAlbum = (TextView) view.findViewById(R.id.song_album);
+        nodCountDisplay = (TextView) view.findViewById(R.id.nod_count_value);
+        playStatusDisplay = (ImageView) view.findViewById(R.id.play_status_image);
+
+        setPlayIcon();
+
+        IntentFilter iF = new IntentFilter();
+        iF.addAction(DataInterpretter.DATA_UPDATED);
+        iF.addAction(MusicPlayerActivity.SERVICECMD);
+
         this.getActivity().registerReceiver(mReceiver, iF);
 
         SensorManager manager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
@@ -62,17 +85,38 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            /* Interpret data */
+            /* Receive pitch and roll data updates to update the headphones animation */
             String action = intent.getAction();
-            String cmd = intent.getStringExtra("command");
-            Log.v("tag ", action + " / " + cmd);
-            pitch = intent.getFloatExtra("pitch", 0);
-            roll = intent.getFloatExtra("roll",0);
+            Log.d(TAG, action);
 
-            pitchIcon(pitch);
-            rollIcon(roll);
+            if (action.equals(DataInterpretter.DATA_UPDATED)){
+                pitch = intent.getFloatExtra("pitch", 0);
+                roll = intent.getFloatExtra("roll",0);
+                pitchIcon(pitch);
+                rollIcon(roll);
+            }
+            else if (action.equals(MusicPlayerActivity.SERVICECMD)) {
+                String command = intent.getStringExtra(MusicPlayerActivity.CMDNAME);
+
+                if (command.equals(MusicPlayerActivity.CMDPLAY)) {
+                    setPlayIcon();
+                }
+                else if (command.equals(MusicPlayerActivity.CMDPAUSE)) {
+                    setPauseIcon();
+                }
+            }
         }
     };
+
+    private void setPauseIcon(){
+        playStatusDisplay.setBackgroundResource(R.drawable.ic_pause);
+
+    }
+
+    private void setPlayIcon(){
+        playStatusDisplay.setBackgroundResource(R.drawable.ic_play);
+    }
+
 
     @Override
     public void onDestroyView() {
