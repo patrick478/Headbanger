@@ -4,10 +4,15 @@
     <style name="AppTheme" parent="android:Theme.Holo">
         <!-- Customize your theme here. -->
         <item name="android:actionBarStyle">@style/myActionBar</item>
+        <item name="android:listViewStyle">@style/myListStyle</item>
     </style>
 
     <style name="myActionBar" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <item name="android:background">#00ffff</item>
+    </style>
+
+    <style name="myListStyle" parent="android:Widget.ListView">
+        <item name="android:background">#00b2b2</item>
     </style>
 
 </resources>

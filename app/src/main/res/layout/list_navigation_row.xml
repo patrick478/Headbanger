@@ -2,7 +2,6 @@
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="60dp"
-    android:background="@drawable/list_direct_navigation_background"
     android:paddingLeft="@dimen/navigation_horizontal_margin"
     android:paddingRight="@dimen/navigation_horizontal_margin"
     xmlns:android="http://schemas.android.com/apk/res/android">

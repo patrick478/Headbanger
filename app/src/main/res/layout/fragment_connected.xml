@@ -62,25 +62,41 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:alpha="1"
-        android:visibility="invisible"
-        android:background="@drawable/play"
+        android:background="@drawable/pause"
         />
 
-    <!--<TextView-->
-        <!--android:id="@+id/nod_count_header"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@id/play_status_image"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:paddingTop="20dp"-->
-        <!--android:text="@+string/nod_count" />-->
+    <ImageView
+        android:id="@+id/previous_status_image"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/song_album"
+        android:layout_toStartOf="@+id/play_status_image"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="16dp"
+        android:alpha="1"
+        android:background="@drawable/previous"
+        />
 
-    <!--<TextView-->
-        <!--android:id="@+id/nod_count_value"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@id/nod_count_header"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:text="0" />-->
+    <ImageView
+        android:id="@+id/next_status_image"
+        android:layout_width="80dp"
+        android:layout_height="48dp"
+        android:layout_below="@id/song_album"
+        android:layout_toEndOf="@+id/play_status_image"
+        android:layout_marginTop="40dp"
+        android:layout_marginStart="16dp"
+        android:alpha="1"
+        android:background="@drawable/next"
+        />
+
+    <TextView
+        android:id="@+id/nod_count_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/play_status_image"
+        android:layout_centerHorizontal="true"
+        android:paddingTop="20dp"
+        android:visibility="invisible"/>
+
 
 </RelativeLayout>

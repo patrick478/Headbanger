@@ -102,6 +102,7 @@ public class MusicPlayerActivity extends Activity{
         i.putExtra(CMDNAME, CMDNEXT);
         MusicPlayerActivity.this.sendBroadcast(i);
         Log.i(CMDNAME, CMDNEXT);
+        resetNodCount();
     }
 
     public void skipToPrevious() {
@@ -109,6 +110,7 @@ public class MusicPlayerActivity extends Activity{
         i.putExtra(CMDNAME, CMDPREVIOUS);
         MusicPlayerActivity.this.sendBroadcast(i);
         Log.i(CMDNAME, CMDPREVIOUS);
+        resetNodCount();
     }
 
     public void pauseMusic() {
@@ -133,7 +135,7 @@ public class MusicPlayerActivity extends Activity{
 
     public void addNod(){
         nodCount++;
-        Log.d(TAG, "nod count increased to " + nodCount);
+//        Log.d(TAG, "nod count increased to " + nodCount);
 
         /* Broadcast to alert UI of update */
         Intent i = new Intent(NOD_CHANGED);

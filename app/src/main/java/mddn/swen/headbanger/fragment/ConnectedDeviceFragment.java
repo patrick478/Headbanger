@@ -40,6 +40,7 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
 
     private Float pitch;
     private Float roll;
+    private int nodCount;
 
     private ImageView connectedIcon;
     private TextView songName;
@@ -47,6 +48,8 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
     private TextView songAlbum;
     private TextView nodCountDisplay;
     private ImageView playStatusDisplay;
+    private ImageView previousStatusDisplay;
+    private ImageView nextStatusDisplay;
 
     private String artist;
     private String track;
@@ -65,9 +68,10 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
         songName = (TextView) view.findViewById(R.id.song_title);
         songArtist = (TextView) view.findViewById(R.id.song_artist);
         songAlbum = (TextView) view.findViewById(R.id.song_album);
-//        nodCountDisplay = (TextView) view.findViewById(R.id.nod_count_value);
+        nodCountDisplay = (TextView) view.findViewById(R.id.nod_count_header);
         playStatusDisplay = (ImageView) view.findViewById(R.id.play_status_image);
-        setPlayIcon();
+        previousStatusDisplay = (ImageView) view.findViewById(R.id.previous_status_image);
+        nextStatusDisplay = (ImageView) view.findViewById(R.id.next_status_image);
 
         iF = new IntentFilter();
         iF.addAction(DataInterpretter.DATA_UPDATED);
@@ -84,7 +88,7 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
             Log.i("","Sensor listener registered");
             }
 
-//        beginIconWiggle();
+        beginTutorialAnim();
         return view;
     }
 
@@ -104,22 +108,27 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
             else if (action.equals(MusicPlayerActivity.SERVICECMD)) {
                 String command = intent.getStringExtra(MusicPlayerActivity.CMDNAME);
                 if (command.equals(MusicPlayerActivity.CMDPLAY)) {
-                    setPlayIcon();
-                    animateGesture();
+                    setPauseIcon();
                 }
                 else if (command.equals(MusicPlayerActivity.CMDPAUSE)) {
-                    setPauseIcon();
-                    animateGesture();
+                    setPlayIcon();
                 }
                 else if (command.equals(MusicPlayerActivity.CMDNEXT)){
-//                    nodCountDisplay.setText(String.format("%d", 0));
-                    setNextIcon();
-                    animateGesture();
+                    animateGesture(nextStatusDisplay);
+                    Animation slide = AnimationUtils.loadAnimation(ConnectedDeviceFragment.this.getActivity(), R.anim.track_info_anim);
+                    songName.startAnimation(slide);
+                    songArtist.startAnimation(slide);
+                    songAlbum.startAnimation(slide);
+                    showRating(nodCount);
 
                 }
                 else if (command.equals(MusicPlayerActivity.CMDPREVIOUS)){
-                    setPreviousIcon();
-                    animateGesture();
+                    animateGesture(previousStatusDisplay);
+                    Animation slide = AnimationUtils.loadAnimation(ConnectedDeviceFragment.this.getActivity(), R.anim.track_info_reverse_anim);
+                    songName.startAnimation(slide);
+                    songArtist.startAnimation(slide);
+                    songAlbum.startAnimation(slide);
+                    showRating(nodCount);
                 }
             }
             else if (action.equals(MusicPlayerActivity.META_CHANGED)){
@@ -130,9 +139,9 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
                 songName.setText(track);
                 songArtist.setText(artist);
                 songAlbum.setText(album);
+                showRating(nodCount);
             }else if (action.equals(MusicPlayerActivity.NOD_CHANGED)){
-                int nodCount = intent.getIntExtra(MusicPlayerActivity.NOD_CHANGED, 0);
-//                nodCountDisplay.setText(String.format("%d", nodCount));
+                nodCount = intent.getIntExtra(MusicPlayerActivity.NOD_CHANGED, 0);
             }
         }
     };
@@ -146,21 +155,16 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
         playStatusDisplay.setBackgroundResource(R.drawable.play);
     }
 
-    private void setNextIcon(){
-        playStatusDisplay.setBackgroundResource(R.drawable.next);
-
+    private void showRating(int nodCount){
+        nodCountDisplay.setText(String.format("Rating: %d", nodCount));
+        nodCountDisplay.setVisibility(View.VISIBLE);
+        Animation rating = AnimationUtils.loadAnimation(ConnectedDeviceFragment.this.getActivity(), R.anim.ratings_anim);
+        nodCountDisplay.startAnimation(rating);
     }
 
-    private void setPreviousIcon(){
-        playStatusDisplay.setBackgroundResource(R.drawable.previous);
-
-    }
-
-    private void animateGesture(){
+    private void animateGesture(ImageView view){
         Animation gesture = AnimationUtils.loadAnimation(ConnectedDeviceFragment.this.getActivity(), R.anim.gesture_anim);
-        playStatusDisplay.setVisibility(View.VISIBLE);
-        playStatusDisplay.startAnimation(gesture);
-        playStatusDisplay.setVisibility(View.INVISIBLE);
+        view.startAnimation(gesture);
     }
 
 
@@ -171,6 +175,9 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
         super.onDestroyView();
         connectedIcon.clearAnimation();
         playStatusDisplay.clearAnimation();
+        nextStatusDisplay.clearAnimation();
+        previousStatusDisplay.clearAnimation();
+        nodCountDisplay.clearAnimation();
         ButterKnife.reset(this);
     }
 
@@ -189,33 +196,14 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
     /**
      * Begins the wiggle animation for the headbanger icon
      */
-    private void beginIconWiggle() {
-        Animation wiggle = AnimationUtils.loadAnimation(this.getActivity(),
-                R.anim.connected_icon_wiggle_anim);
-        wiggle.setAnimationListener(new Animation.AnimationListener() {
+    private void beginTutorialAnim() {
+        Animation tutorialIcon = AnimationUtils.loadAnimation(this.getActivity(), R.anim.tutorial_headphone_anim);
+        connectedIcon.startAnimation(tutorialIcon);
 
-            @Override
-            public void onAnimationEnd(final Animation animation) {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (connectedIcon != null) {
-                            connectedIcon.clearAnimation();
-                            beginIconWiggle();
-                        }
-                    }
-                }, 5000);
-            }
-
-            @Override
-            public void onAnimationStart(Animation animation) {
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-            }
-        });
-        connectedIcon.startAnimation(wiggle);
+        Animation nextGesture = AnimationUtils.loadAnimation(ConnectedDeviceFragment.this.getActivity(), R.anim.tutorial_gesture_next_anim);
+        nextStatusDisplay.startAnimation(nextGesture);
+        Animation prevGesture = AnimationUtils.loadAnimation(ConnectedDeviceFragment.this.getActivity(), R.anim.tutorial_gesture_anim);
+        previousStatusDisplay.startAnimation(prevGesture);
     }
 
     /**

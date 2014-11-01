@@ -3,9 +3,11 @@
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
     <alpha
+        android:interpolator="@android:anim/accelerate_interpolator"
         android:fromAlpha="1"
         android:toAlpha="0"
         android:duration="1000"
+        android:startOffset="1500"
         >
     </alpha>
 
@@ -17,7 +19,9 @@
         android:pivotX="50%"
         android:pivotY="50%"
         android:duration="1000"
+        android:startOffset="1500"
         >
     </scale>
+
 
 </set>
