@@ -9,14 +9,22 @@
 
     <!--Category titles-->
     <string name="settings_cat_general">General</string>
+    <string name="settings_cat_preferences">Preferences</string>
     <string name="settings_cat_manage">Account</string>
     <string name="settings_cat_about">About</string>
 
     <!--Button titles-->
     <string name="settings_pref_display_name">Display Name</string>
     <string name="settings_pref_sign_out">Sign Out</string>
+    <string name="settings_pref_sensitivity">Sensitivity</string>
 
     <!--Build information-->
     <string name="settings_pref_build">Build Information</string>
+
+    <!--Sensitivity dialog-->
+    <string name="settings_sensitivity_title">Adjust Sensitivity</string>
+    <string name="settings_sensitivity_message">Tweak the sensitivity of the headset to your liking</string>
+    <string name="settings_sensitivity_confirm">Ok</string>
+    <string name="settings_sensitivity_cancel">Cancel</string>
 
 </resources>

@@ -1,18 +1,27 @@
 package mddn.swen.headbanger.utilities;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
+import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import mddn.swen.headbanger.BuildConfig;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.activity.MainActivity;
 
 import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_BUILD;
+import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_SENSITIVITY;
 import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_SIGN_OUT;
 import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.EDITTEXT_DISPLAY_NAME;
 
@@ -21,6 +30,8 @@ public class UserSettingsController {
     /* Context to build under */
     private MainActivity mainActivity;
 
+    private Preference sensitivityPreference;
+
     /**
      * Used to enumerate the type of Preference to be displayed
      */
@@ -28,6 +39,7 @@ public class UserSettingsController {
 
         /* List the preferences */
         EDITTEXT_DISPLAY_NAME(R.string.settings_pref_display_name, "display_name"),
+        BUTTON_SENSITIVITY(R.string.settings_pref_sensitivity, null),
         BUTTON_SIGN_OUT(R.string.settings_pref_sign_out, null),
         BUTTON_BUILD(R.string.settings_pref_build, null);
 
@@ -62,10 +74,12 @@ public class UserSettingsController {
      * @param screen    The preference screen to attach to
      */
     private void addGeneralInfo(PreferenceScreen screen) {
+
         PreferenceCategory generalCategory = new PreferenceCategory(mainActivity);
         screen.addPreference(generalCategory);
         generalCategory.setTitle(R.string.settings_cat_general);
         addButton(generalCategory, EDITTEXT_DISPLAY_NAME, User.getGraphUser().getName());
+        sensitivityPreference = addButton(generalCategory, BUTTON_SENSITIVITY, "" + getCurrentSensitivity());
     }
 
     /**
@@ -99,7 +113,7 @@ public class UserSettingsController {
      * @param pref    The preference this is building for
      * @param value   The current value of the preference
      */
-    private void addButton(PreferenceGroup parent, final HeadbangerPreference pref, String value) {
+    private Preference addButton(PreferenceGroup parent, final HeadbangerPreference pref, String value) {
         Preference preference = new Preference(mainActivity);
         preference.setTitle(pref.resId);
         if (value != null) {
@@ -113,6 +127,7 @@ public class UserSettingsController {
             }
         });
         parent.addPreference(preference);
+        return preference;
     }
 
     /**
@@ -124,6 +139,9 @@ public class UserSettingsController {
         switch (preference) {
             case BUTTON_SIGN_OUT:
                 showSignOutConfirmation();
+                break;
+            case BUTTON_SENSITIVITY:
+                showSensitivitySlider();
                 break;
             default:
                 break;
@@ -151,6 +169,85 @@ public class UserSettingsController {
                 .setNegativeButton(R.string.settings_confirm_sign_out_negative, null)
                 .show();
     }
+
+    /**
+     * Called when the user wishes to adjust the sensitivity. Note has no <i>actual</i> effect.
+     */
+    private void showSensitivitySlider() {
+
+        /* Build the dialog */
+        final AlertDialog.Builder alert = new AlertDialog.Builder(mainActivity);
+        alert.setTitle(mainActivity.getString(R.string.settings_sensitivity_title));
+        alert.setMessage(mainActivity.getString(R.string.settings_sensitivity_message));
+        LayoutInflater inflater = (LayoutInflater) mainActivity.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+        View layout = inflater.inflate(R.layout.view_dialog_slider, (ViewGroup) mainActivity.findViewById(R.id.seeker_dialog_root));
+        alert.setView(layout);
+
+        /* Get the elements */
+        final SeekBar seekBar = (SeekBar) layout.findViewById(R.id.seeker_dialog_bar);
+        seekBar.setProgress(getCurrentSensitivity());
+        seekBar.setMax(100);
+        final TextView value = (TextView) layout.findViewById(R.id.seeker_dialog_text_view);
+        value.setText("" + seekBar.getProgress());
+
+        /* Update the text view with the progress */
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                value.setText("" + progress);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+            }
+        });
+
+        /* Listen to confirmation */
+        alert.setPositiveButton(mainActivity.getString(R.string.settings_sensitivity_confirm),
+                new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                setNewSensitivity(seekBar.getProgress());
+                sensitivityPreference.setSummary(value.getText());
+            }
+        });
+
+        /* Ignore cancelling */
+        alert.setNegativeButton(mainActivity.getString(R.string.settings_sensitivity_cancel), null);
+
+        /* Display */
+        alert.show();
+    }
+
+    /**
+     * Set a new sensitivity preference
+     *
+     * @param progress
+     */
+    private void setNewSensitivity(int progress) {
+
+        /* Get the shared prefs */
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+
+        /* Commit the new value, whatever it is */
+        sp.edit().putInt("current_sensitivity", progress).commit();
+    }
+
+    /**
+     * Get the current sensitivity preference
+     *
+     * @return
+     */
+    private int getCurrentSensitivity() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+        return sp.getInt("current_sensitivity", 0);
+    }
+
 
     /**
      * Returns the build information for the app

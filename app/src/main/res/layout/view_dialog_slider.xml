@@ -1,0 +1,21 @@
+<RelativeLayout
+    android:id="@+id/seeker_dialog_root"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SeekBar
+        android:id="@+id/seeker_dialog_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/seeker_dialog_text_view"
+        android:layout_below="@+id/seeker_dialog_bar"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
