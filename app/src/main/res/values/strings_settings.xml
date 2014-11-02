@@ -27,4 +27,7 @@
     <string name="settings_sensitivity_confirm">Ok</string>
     <string name="settings_sensitivity_cancel">Cancel</string>
 
+    <!--Social media opt-in -->
+    <string name="settings_social_opt_in">Social Media Opt-in</string>
+
 </resources>

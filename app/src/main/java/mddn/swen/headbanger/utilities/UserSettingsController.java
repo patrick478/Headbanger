@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.preference.CheckBoxPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
@@ -23,6 +24,7 @@ import mddn.swen.headbanger.activity.MainActivity;
 import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_BUILD;
 import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_SENSITIVITY;
 import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.BUTTON_SIGN_OUT;
+import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.CHECKBOX_OPT_IN;
 import static mddn.swen.headbanger.utilities.UserSettingsController.HeadbangerPreference.EDITTEXT_DISPLAY_NAME;
 
 public class UserSettingsController {
@@ -39,6 +41,7 @@ public class UserSettingsController {
 
         /* List the preferences */
         EDITTEXT_DISPLAY_NAME(R.string.settings_pref_display_name, "display_name"),
+        CHECKBOX_OPT_IN(R.string.settings_social_opt_in, null),
         BUTTON_SENSITIVITY(R.string.settings_pref_sensitivity, null),
         BUTTON_SIGN_OUT(R.string.settings_pref_sign_out, null),
         BUTTON_BUILD(R.string.settings_pref_build, null);
@@ -80,6 +83,7 @@ public class UserSettingsController {
         generalCategory.setTitle(R.string.settings_cat_general);
         addButton(generalCategory, EDITTEXT_DISPLAY_NAME, User.getGraphUser().getName());
         sensitivityPreference = addButton(generalCategory, BUTTON_SENSITIVITY, "" + getCurrentSensitivity());
+        addSocialCheckbox(generalCategory, CHECKBOX_OPT_IN, null);
     }
 
     /**
@@ -104,6 +108,40 @@ public class UserSettingsController {
         screen.addPreference(aboutCategory);
         aboutCategory.setTitle(R.string.settings_cat_about);
         addButton(aboutCategory, BUTTON_BUILD, getBuildString());
+    }
+
+    /**
+     * Helper function to add a checkbox to the preferences pane
+     *
+     * @param parent  The group this will belong to
+     * @param pref    The preference this is building for
+     * @param value   The current value of the preference
+     */
+    private void addSocialCheckbox(PreferenceGroup parent, final HeadbangerPreference pref, String value) {
+        CheckBoxPreference preference = new CheckBoxPreference(mainActivity);
+        preference.setTitle(pref.resId);
+        preference.setChecked(getSocialOptInStatus());
+        preference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                return setSocialOptIn((Boolean) newValue);
+            }
+        });
+        parent.addPreference(preference);
+    }
+
+    private boolean getSocialOptInStatus() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+        return sp.getBoolean("opting_in", false);
+    }
+
+    private boolean setSocialOptIn(Boolean newValue) {
+
+        /* Get the shared prefs */
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(mainActivity);
+
+        /* Commit the new value, whatever it is */
+        return sp.edit().putBoolean("opting_in", (Boolean) newValue).commit();
     }
 
     /**
@@ -210,12 +248,12 @@ public class UserSettingsController {
         /* Listen to confirmation */
         alert.setPositiveButton(mainActivity.getString(R.string.settings_sensitivity_confirm),
                 new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int id) {
-                setNewSensitivity(seekBar.getProgress());
-                sensitivityPreference.setSummary(value.getText());
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        setNewSensitivity(seekBar.getProgress());
+                        sensitivityPreference.setSummary(value.getText());
+                    }
+                });
 
         /* Ignore cancelling */
         alert.setNegativeButton(mainActivity.getString(R.string.settings_sensitivity_cancel), null);
