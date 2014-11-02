@@ -163,7 +163,7 @@ public class DataInterpretter {
         /* the gesture we are looking for only matters if music is not paused */
         if (musicPlayer.isPlaying()) {
             if (rollState != prevRollState && elapsedTime > 1) { //TODO: figure out timer logic
-                gestureRange = getCurrentSensitivity()/10 + 5;
+                gestureRange = (100-getCurrentSensitivity())/10 + 5;
 
                 /* if user tilted or turned their head to the right, skip to the next song */
                 if (musicPlayer.hasNextTrackLoaded() && roll < (0 - gestureRange)) {
