@@ -23,21 +23,17 @@ import android.bluetooth.BluetoothManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.ScaleAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import butterknife.InjectView;
 import mddn.swen.headbanger.R;
 import mddn.swen.headbanger.utilities.HeadsetGattAttributes;
 
@@ -51,6 +47,7 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
     private Handler mHandler;
     private TextView searchStatusDisplay;
     private ImageButton scanButton;
+    private Button skipButton;
 
     private static final int REQUEST_ENABLE_BT = 1;
     // Stops scanning after 30 seconds.
@@ -64,7 +61,10 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
         mHandler = new Handler();
         searchStatusDisplay = (TextView) findViewById(R.id.device_scan_status);
         scanButton = (ImageButton) findViewById(R.id.headbanger_scanning_icon);
+        skipButton = (Button) findViewById(R.id.skip_scan_button);
+
         scanButton.setOnClickListener(this);
+        skipButton.setOnClickListener(this);
 
         // Use this check to determine whether BLE is supported on the device.  Then you can
         // selectively disable BLE-related features.
@@ -240,7 +240,15 @@ public class DeviceScanActivity extends Activity implements View.OnClickListener
 
     @Override
     public void onClick(View view) {
-        searchStatusDisplay.setText("Searching for headset...");
-        scanLeDevice(true);
+        if (view.getId() == R.id.headbanger_scanning_icon){
+            searchStatusDisplay.setText("Searching for headset...");
+            scanLeDevice(true);
+        }
+
+        else if (view.getId() == R.id.skip_scan_button){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+        }
+
     }
 }

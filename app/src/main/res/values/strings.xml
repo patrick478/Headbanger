@@ -54,6 +54,7 @@
 
     <string name="title_activity_maps">Map</string>
     <string name="nod_count">Rating: </string>
+    <string name="skip_connection">Skip this, connect later.</string>
 
     <color name="darkest_teal">#006b6b</color>
     <color name="dark_teal">#00b2b2</color>

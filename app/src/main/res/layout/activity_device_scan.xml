@@ -23,15 +23,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/headset_searching" />
+        android:text="@string/headset_searching"
+        android:textColor="@color/teal"/>
 
-    <!--<Button-->
-        <!--android:id="@+id/device_scan_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginTop="30dp"-->
-        <!--android:enabled="false"-->
-        <!--android:padding="20dp"-->
-        <!--android:text="@string/start_scan_button" />-->
+    <Button
+        android:id="@+id/skip_scan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:padding="20dp"
+        android:text="@string/skip_connection"
+        android:textColor="@color/dark_teal"
+        android:background="@color/dark_grey"/>
 
 </LinearLayout>
