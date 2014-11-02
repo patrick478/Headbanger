@@ -55,4 +55,10 @@
     <string name="title_activity_maps">Map</string>
     <string name="nod_count">Rating: </string>
 
+    <color name="darkest_teal">#006b6b</color>
+    <color name="dark_teal">#00b2b2</color>
+    <color name="teal">#00ffff</color>
+    <color name="orange_teal">#b24200</color>
+    <color name="brown_teal">#ff5e00</color>
+
 </resources>
