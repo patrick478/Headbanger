@@ -99,7 +99,7 @@ public class DataInterpretter {
             Log.d(TAG, "roll is: " + roll);
 
             //yaw = newYaw
-        } catch(NumberFormatException e){
+        } catch(Exception e){
             e.printStackTrace();
         }
     }
