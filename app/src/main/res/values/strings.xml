@@ -30,7 +30,7 @@
     <string name="stop_scan_button">Stop</string>
     <string name="headset_searching">Searching for headset…</string>
     <string name="headset_connecting">Connecting to headset…</string>
-    <string name="headset_not_found">Could not a!\nPlease check whether Bluetooth\nis turned on and tap the headphones to try again."</string>
+    <string name="headset_not_found">Could not connect!\nPlease check your Bluetooth settings,\ntap the headphones to try again."</string>
     <string name="headset_not_found_title">Headbanger can\'t connect to the headset</string>
     <string name="headset_not_found_message">Please check your Bluetooth settings and tap the headphones to try again.</string>
 
