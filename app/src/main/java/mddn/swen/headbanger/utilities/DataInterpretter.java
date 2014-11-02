@@ -2,6 +2,8 @@ package mddn.swen.headbanger.utilities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -35,7 +37,7 @@ public class DataInterpretter {
     private GestureState prevRollState;
     private float prevRoll;
 
-    private int gestureRange = 10;   //FIXME: this is used, but not sure what value it should have.
+    private int gestureRange = 10;
 
     //Timing details for gestures
 //    private TimerObject rollGestureTimer;  //TODO: figure out timer logic
@@ -44,8 +46,6 @@ public class DataInterpretter {
 
     //state values for gestures
     private enum GestureState {INCREASING, DECREASING};
-
-    private String nodBPM;  //FIXME: not sure what this is for
 
     //music playback controller
     private MusicPlayerActivity musicPlayer;
@@ -61,6 +61,15 @@ public class DataInterpretter {
         musicPlayer = (MusicPlayerActivity) parent;
     }
 
+    /**
+     * Get the current sensitivity preference
+     *
+     * @return
+     */
+    private int getCurrentSensitivity() {
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(parentActivity);
+        return sp.getInt("current_sensitivity", 0);
+    }
 
 
     public void interpretData(String data){
@@ -154,6 +163,7 @@ public class DataInterpretter {
         /* the gesture we are looking for only matters if music is not paused */
         if (musicPlayer.isPlaying()) {
             if (rollState != prevRollState && elapsedTime > 1) { //TODO: figure out timer logic
+                gestureRange = getCurrentSensitivity()/10 + 5;
 
                 /* if user tilted or turned their head to the right, skip to the next song */
                 if (musicPlayer.hasNextTrackLoaded() && roll < (0 - gestureRange)) {
