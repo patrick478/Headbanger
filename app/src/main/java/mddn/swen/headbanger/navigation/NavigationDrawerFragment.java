@@ -143,6 +143,15 @@ public class NavigationDrawerFragment extends Fragment implements AdapterView.On
     }
 
     /**
+     * Programatically close the navigation drawer
+     */
+    public void closeDrawer() {
+        if (isDrawerOpen()) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+
+    /**
      * Setup the navigation items in the panel
      */
     private void setupItems() {

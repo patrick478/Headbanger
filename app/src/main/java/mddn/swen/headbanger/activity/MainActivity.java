@@ -73,8 +73,13 @@ public class MainActivity extends DeviceControlActivity {
     public boolean onOptionsItemSelected(MenuItem menuItem) {
         switch (menuItem.getItemId()) {
             case android.R.id.home:
-                navigationDrawerFragment.openDrawer();
-                return true;
+                if (navigationDrawerFragment.isDrawerOpen()){
+                    navigationDrawerFragment.closeDrawer();
+                    return true;
+                }else{
+                    navigationDrawerFragment.openDrawer();
+                    return true;
+                }
         }
         return super.onOptionsItemSelected(menuItem);
     }
