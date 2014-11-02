@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -15,6 +16,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +45,7 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
     private int nodCount;
 
     private ImageView connectedIcon;
+    private View headphoneBackground;
     private TextView songName;
     private TextView songArtist;
     private TextView songAlbum;
@@ -87,6 +90,10 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
                 manager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
             Log.i("","Sensor listener registered");
             }
+
+        Toast connected = Toast.makeText(this.getActivity(), "Connected to headphones successfully", Toast.LENGTH_LONG);
+        connected.setGravity(Gravity.TOP, 0, 72);
+        connected.show();
 
         beginTutorialAnim();
         return view;
