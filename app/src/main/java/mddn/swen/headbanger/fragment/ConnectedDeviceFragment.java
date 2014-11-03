@@ -36,7 +36,7 @@ import mddn.swen.headbanger.utilities.MusicPlayerActivity;
 /**
  * Is displayed when the application has successfully connected with a device
  */
-public class ConnectedDeviceFragment extends Fragment implements SensorEventListener{
+public class ConnectedDeviceFragment extends Fragment{
 
     private static final String TAG = ConnectedDeviceFragment.class.getSimpleName();
 
@@ -84,18 +84,8 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
 
         this.getActivity().registerReceiver(mReceiver, iF);
 
-        SensorManager manager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        if(manager.getSensorList(Sensor.TYPE_ACCELEROMETER).size() != 0) {
-                Sensor accelerometer = manager.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0);
-                manager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
-            Log.i("","Sensor listener registered");
-            }
-
-        Toast connected = Toast.makeText(this.getActivity(), "Connected to headphones successfully", Toast.LENGTH_LONG);
-        connected.setGravity(Gravity.TOP, 0, 72);
-        connected.show();
-
         beginTutorialAnim();
+
         return view;
     }
 
@@ -213,31 +203,6 @@ public class ConnectedDeviceFragment extends Fragment implements SensorEventList
         previousStatusDisplay.startAnimation(prevGesture);
     }
 
-    /**
-     * Methods for Sensor wont be needed once the
-     * @param sensor
-     * @param accuracy
-     */
-    @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // TODO Auto-generated method stub
-
-        }
-
-    @Override
-        public void onSensorChanged(SensorEvent event) {
-            // TODO Auto-generated method stub
-            if(connectedIcon != null) {
-                /**
-                 * Get the pitch values from the control activity
-                 */
-//                pitchIcon(event.values[0]/20);
-//                Log.i("Pitch",Float.toString(event.values[0]));
-//                rollIcon(event.values[1]*10);
-//                Log.i("Roll",Float.toString(event.values[1]));
-
-            }
-        }
 
     /**
      * Rotates the icon depending on values from the headphones/Sensor for testing

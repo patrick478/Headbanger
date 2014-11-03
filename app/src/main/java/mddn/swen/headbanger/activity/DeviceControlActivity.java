@@ -28,6 +28,8 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.google.android.gms.games.internal.constants.TimeSpan;
 
@@ -99,6 +101,9 @@ public class DeviceControlActivity extends MusicPlayerActivity {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
                 mConnected = true;
+                Toast connected = Toast.makeText(context, "Connected to headphones successfully", Toast.LENGTH_LONG);
+                connected.setGravity(Gravity.TOP, 0, 72);
+                connected.show();
                 updateConnectionState(R.string.connected_successful_string);
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
