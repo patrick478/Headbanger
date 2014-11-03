@@ -62,6 +62,11 @@ public class SongRatingFragment extends Fragment {
         fakeMap.put("Only Love Can Hurt", BitmapFactory.decodeResource(getResources(), R.drawable.faith));
         fakeMap.put("Thinking Out Loud", BitmapFactory.decodeResource(getResources(), R.drawable.sheeran));
         fakeMap.put("I'm Not the Only One", BitmapFactory.decodeResource(getResources(), R.drawable.smith));
+        fakeMap.put("Bang Bang", BitmapFactory.decodeResource(getResources(), R.drawable.jessie));
+        fakeMap.put("Ugly Heart", BitmapFactory.decodeResource(getResources(), R.drawable.grl));
+        fakeMap.put("Budapest", BitmapFactory.decodeResource(getResources(), R.drawable.ezra));
+        fakeMap.put("Blame", BitmapFactory.decodeResource(getResources(), R.drawable.harris));
+        fakeMap.put("Superheroes", BitmapFactory.decodeResource(getResources(), R.drawable.script));
         List<SongRatingAdapter.SongListItem> items = new ArrayList<SongRatingAdapter.SongListItem>();
         for (String songTitle : fakeMap.keySet()) {
             SongRatingAdapter.SongListItem item = new SongRatingAdapter.SongListItem();

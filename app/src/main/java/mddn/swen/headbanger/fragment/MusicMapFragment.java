@@ -117,41 +117,41 @@ public class MusicMapFragment extends Fragment {
      */
     private void fakeData() {
         addCurrentUser();
-        if (false) { //Killed due to memory pressure for now
-            for (int i = 0; i < 5; i++) {
-                MapUser mapUser = new MapUser();
-                LatLng coordinates;
-                if (i == 0) {
-                    mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.swift);
-                    mapUser.lastSong = "Shake it off";
-                    mapUser.name = "Taylor Swift";
-                    mapUser.lastSongRating = "0";
-                    coordinates = new LatLng(-41.2955482, 174.77560440000002);
-                } else if (i == 1) {
-                    mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.swift);
-                    mapUser.lastSong = "Shake it off";
-                    mapUser.name = "Taylor Swift";
-                    mapUser.lastSongRating = "0";
-                    coordinates = new LatLng(-41.2955482, 174.77560440000002);
-                } else if (i == 2) {
-                    mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.swift);
-                    mapUser.lastSong = "Shake it off";
-                    mapUser.name = "Taylor Swift";
-                    mapUser.lastSongRating = "0";
-                    coordinates = new LatLng(-41.2955482, 174.77560440000002);
-                } else if (i == 3) {
-                    mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.swift);
-                    mapUser.lastSong = "Shake it off";
-                    mapUser.name = "Taylor Swift";
-                    mapUser.lastSongRating = "0";
-                    coordinates = new LatLng(-41.2955482, 174.77560440000002);
-                } else {
-                    mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.swift);
-                    mapUser.lastSong = "Shake it off";
-                    mapUser.name = "Taylor Swift";
-                    mapUser.lastSongRating = "0";
-                    coordinates = new LatLng(-41.2955482, 174.77560440000002);
-                }
+        for (int i = 0; i < 5; i++) {
+            MapUser mapUser = new MapUser();
+            LatLng coordinates = null;
+            if (i == 0) {
+                mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.john);
+                mapUser.lastSong = "Shake it off";
+                mapUser.name = "Taylor Swift";
+                mapUser.lastSongRating = "" + ((int) (Math.random() * 5.0));
+                coordinates = new LatLng(-41.296, 174.778);
+            } else if (i == 1) {
+                mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.pragya);
+                mapUser.lastSong = "Budapest";
+                mapUser.name = "George Ezra";
+                mapUser.lastSongRating = "" + ((int) (Math.random() * 5.0));
+                coordinates = new LatLng(-41.297, 174.775);
+            } else if (i == 2) {
+                mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.patrick);
+                mapUser.lastSong = "All About That Bass";
+                mapUser.name = "Meghan Trainor";
+                mapUser.lastSongRating = "" + ((int) (Math.random() * 5.0));
+                coordinates = new LatLng(-41.298, 174.782);
+            } else if (i == 3) {
+                mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.jobs);
+                mapUser.lastSong = "Only Love Can Hurt";
+                mapUser.name = "Paloma Faith";
+                mapUser.lastSongRating = "" + ((int) (Math.random() * 5.0));
+                coordinates = new LatLng(-41.294, 174.77);
+            } else {
+                mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.ballmer);
+                mapUser.lastSong = "Thinking Out Loud";
+                mapUser.name = "Ed Sheeran";
+                mapUser.lastSongRating = "" + ((int) (Math.random() * 5.0));
+                coordinates = new LatLng(-41.293, 174.776);
+            }
+            if (coordinates != null) {
                 Marker marker = map.addMarker(new MarkerOptions().position(coordinates));
                 markers.put(marker.getId(), mapUser);
             }
@@ -179,7 +179,7 @@ public class MusicMapFragment extends Fragment {
             mapUser.userPic = BitmapFactory.decodeResource(getResources(), R.drawable.swift);
             mapUser.lastSong = "Shake it off";
             mapUser.name = "Taylor Swift";
-            mapUser.lastSongRating = "0";
+            mapUser.lastSongRating = "5";
 
             /* Add to major map */
             markers.put(marker.getId(), mapUser);
